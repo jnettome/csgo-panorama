@@ -45,6 +45,12 @@
 			</Panel>
 		</snippet>
 
+    <snippet name="RadarImageSnippet" >
+      <Image class="RadarTextMapImg" textureheight="10" texturewidth="10" antialias="true" scaling="stretch-to-fit-preserve-aspect">
+                                                     
+                                                                                                        
+      </Image>
+    </snippet>
 	</snippets>
 
 	<CSGOHudRadar class="hud-radar" hittest="false">
@@ -66,7 +72,7 @@
 				<Panel id="Radar__Round--Overlay"/>
 			</Panel>
 
-          <Panel id="Radar__Square">
+          <Panel id="Radar__Square" antialias="true">
 			<Panel id="Radar__Square--Inner">
 				<Panel id="Radar__Square--InnerTransform" force-no-composition-layer="true">
 					                                                                                

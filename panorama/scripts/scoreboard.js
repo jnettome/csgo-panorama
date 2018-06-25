@@ -42,6 +42,7 @@ var arrStatsNotToTeamColorize = [
 ]
 
 
+
 var Scoreboard = ( function()
 {
 
@@ -75,6 +76,8 @@ var Scoreboard = ( function()
 	var _m_oPlayers;				                               
 
 	var _m_TopCommends;
+
+	var _m_sortOrder;                                 
 
 	var _m_cP = $.GetContextPanel();
 
@@ -381,6 +384,7 @@ var Scoreboard = ( function()
 		_m_dataSetGetCount = 0;
 		_m_areTeamsSwapped = false;
 		_m_maxRounds = 0;
+		_m_sortOrder = undefined;
 
 		_m_TopCommends = {
 			'leader': 0,
@@ -484,7 +488,7 @@ var Scoreboard = ( function()
 		oPlayer.m_oStats[ 'teacher' ] = -1;
 		oPlayer.m_oStats[ 'friendly' ] = -1;
 		
-		if ( !elPlayer )
+		if ( !elPlayer || !elPlayer.IsValid() )
 			return;
 		
 		                                               
@@ -536,6 +540,8 @@ var Scoreboard = ( function()
 		_UpdateAllStatsForPlayer( idx, true );
 
 		_SortPlayer( idx );
+
+		_HighlightSortStatLabel( 'score' );
 	}
 
 
@@ -637,6 +643,7 @@ var Scoreboard = ( function()
 	                                                
 
 
+
 	var sortOrder_default = {
 
 		'score': 0,
@@ -648,7 +655,15 @@ var Scoreboard = ( function()
 		'teacher': 0,
 		'friendly': 0,
 		'rank': 0,
-		'idx': -1
+		'idx': -1,
+		                                                              
+		                                                                		
+		'money': 0,
+		'hsp': 0,
+		'kdr': 0,
+		'adr':0,
+		'utilitydamage': 0,
+		'enemiesflashed' :0,
 	};
 
 
@@ -682,18 +697,25 @@ var Scoreboard = ( function()
 	var sortOrder_dm = {
 
 		'score': 0,
-		              
-		                
-		                           
-		             
-		'idx': -1
+		'idx': -1,
+		                                                              
+		                                                                		
+		'kills': 0,
+		'assists': 0,
+		'deaths': -1,           
+		'rank': 0,
 	}
 
 	var sortOrder_gg = {
 
 		'gglevel': 0,
 		'ggleader': 0,
-		'idx': -1
+		'idx': -1,
+		                                                              
+		                                                                
+		'kills': 0,
+		'assists': 0,
+		'deaths': -1,           
 	}
 
 
@@ -712,29 +734,7 @@ var Scoreboard = ( function()
 
 		if ( !elPlayer )
 			return;	
-
-		var sortOrder = sortOrder_default;
-
-
-
-		switch ( MatchStatsAPI.GetGameMode() )
-		{
-			       
-			                
-				                               
-				      
-			       
-
-			case "gungameprogressive":            
-				sortOrder = sortOrder_gg;
-				break;
-
-			case "deathmatch":
-				sortOrder = sortOrder_dm;
-				break;
-		}
-
-
+		
 
 		                                     
 		var children = elTeam.Children();
@@ -748,13 +748,13 @@ var Scoreboard = ( function()
 			if ( !oCompareTargetPlayer )
 				continue;
 
-			for ( var stat in sortOrder )
+			for ( var stat in _m_sortOrder )
 			{
 
 				var p1stat;
 				var p2stat;
 
-				if ( sortOrder[ stat ] === -1 )            
+				if ( _m_sortOrder[ stat ] === -1 )            
 				{
 					p2stat = oPlayer.m_oStats[ stat ];
 					p1stat = oCompareTargetPlayer.m_oStats[ stat ];
@@ -765,7 +765,8 @@ var Scoreboard = ( function()
 					p2stat = oCompareTargetPlayer.m_oStats[ stat ];
 				}
 
-				if ( p1stat > p2stat )
+				if ( ( p1stat > p2stat ) ||
+						( ( p1stat != undefined ) && ( p2stat == undefined ) ) )
 				{
 
 					if ( children[ i - 1 ] != elPlayer )
@@ -788,7 +789,8 @@ var Scoreboard = ( function()
 
 					return;
 				}
-				else if ( p1stat < p2stat )
+				else if ( ( p1stat < p2stat ) ||
+				( ( p1stat == undefined ) && ( p2stat != undefined ) ) )
 				{
 
 					                                                             
@@ -1633,17 +1635,7 @@ var Scoreboard = ( function()
 
 	function _GetPlayerRowForGameMode ()
 	{
-		var mode = MatchStatsAPI.GetGameMode();
-		if ( mode == "casual" )
-		{
-			                                          
-			var skirmishId = GameTypesAPI.GetCurrentSkirmishId();
-			if ( skirmishId != 0 )	
-			{
-				mode = GameTypesAPI.GetSkirmishInternalName( skirmishId );
-			}
-		}
-			
+		var mode = GameStateAPI.GetGameModeInternalName(true);
 
 		switch ( mode )
 		{
@@ -1677,7 +1669,22 @@ var Scoreboard = ( function()
 
 	}
 
-
+	function _HighlightSortStatLabel ( stat )
+	{
+		                        
+		_m_cP.FindChildrenWithClassTraverse( 'sb-row__cell' ).forEach( function( el )
+		{
+			if ( el.BHasClass( 'sb-row__cell--'+ stat ) )
+			{
+				el.AddClass( 'sortstat' );
+			}
+			else
+			{
+				el.RemoveClass( 'sortstat' );
+			}
+			
+		} );
+	}
 
 	function _CreateLabelForStat ( stat, set )
 	{
@@ -1763,22 +1770,24 @@ var Scoreboard = ( function()
 		var elStatPanel = elLabelRowOrSet.FindChildInLayoutFile( "id-sb-" + stat );
 		if ( !elStatPanel )
 		{
-			elStatPanel = $.CreatePanel( "Panel", elLabelRowOrSet, "id-sb-" + stat );
+			elStatPanel = $.CreatePanel( "Button", elLabelRowOrSet, "id-sb-" + stat );
 			elStatPanel.AddClass( "sb-row__cell" );
 			elStatPanel.AddClass( "sb-row__cell--" + stat );
 			elStatPanel.AddClass( "sb-row__cell--label" );
 
 			var elStatLabel;
 
+
+
 			                                                           
 			if ( stat === "ping" )
 			{
-				elStatLabel = $.CreatePanel( "Image", elStatPanel, "id-sb-" + stat );
+				elStatLabel = $.CreatePanel( "Image", elStatPanel, "label-" + elStatPanel.id );
 				elStatLabel.SetImage( "file://{images}/icons/ui/ping_4.svg" );
 			}
 			else
 			{
-				elStatLabel = $.CreatePanel( "Label", elStatPanel, "id-sb-" + stat );
+				elStatLabel = $.CreatePanel( "Label", elStatPanel, "label-" + elStatPanel.id );
 				elStatLabel.text = $.Localize( "#Scoreboard_" + stat );
 			}
 
@@ -1795,6 +1804,45 @@ var Scoreboard = ( function()
 				elStatLabel.SetPanelEvent( 'onmouseover', OnMouseOver.bind( undefined, elStatLabel.id, toolTipString ) );
 				elStatLabel.SetPanelEvent( 'onmouseout', function() { UiToolkitAPI.HideTextTooltip() } );
 			}
+
+			function _SetNewSortStat ( stat )
+			{
+				var newSortOrder = {};
+
+				                                              
+				var modeDefaultSortOrder = _GetSortOrderForMode( GameStateAPI.GetGameModeInternalName( true ) );
+
+				                                             
+				                                 
+				if ( stat in modeDefaultSortOrder )
+					newSortOrder[ stat ] = modeDefaultSortOrder[ stat ];
+				else
+					return;
+				
+				_HighlightSortStatLabel( stat );
+
+				                                 
+				for ( var s in modeDefaultSortOrder )
+				{
+					if ( s == stat )
+						continue;
+					
+					newSortOrder[ s ] = modeDefaultSortOrder[ s ];
+				}
+
+				                                        
+				_m_sortOrder = newSortOrder;
+
+				                                
+				for ( var i = 0; i < _m_oPlayers.GetCount(); i++ )
+				{
+					_SortPlayer( i, true );
+				};
+
+			}
+
+			elStatPanel.SetPanelEvent( 'onactivate', _SetNewSortStat.bind( undefined, stat ) );
+
 		}
 	}
 
@@ -2415,8 +2463,8 @@ var Scoreboard = ( function()
 		if ( !jsoTime )
 			return;
 
-		if ( ( MatchStatsAPI.GetGameMode() === "competitive" ) ||
-			( MatchStatsAPI.GetGameMode() === "gungametrbomb" ) )
+		if ( ( GameStateAPI.GetGameModeInternalName(true) === "competitive" ) ||
+			( GameStateAPI.GetGameModeInternalName(true)=== "gungametrbomb" ) )
 		{
 			var midRound = Math.ceil( jsoTime[ "maxrounds" ] / 2 );
 			var lastRound = jsoTime[ "maxrounds" ];
@@ -2515,6 +2563,27 @@ var Scoreboard = ( function()
 			_CreateLabelForStat( stat, set );
 		
 	}
+
+
+	function _GetSortOrderForMode ( mode )
+	{
+		switch ( mode )
+		{
+			       
+			                
+				                          
+			       
+
+			case "gungameprogressive":            
+				return sortOrder_gg;
+
+			case "deathmatch":
+				return sortOrder_dm;
+
+			default:
+				return sortOrder_default;
+		}	
+	}
 	                                                
 	function _Initialize ()
 	{
@@ -2525,34 +2594,34 @@ var Scoreboard = ( function()
 		var jsoTime = GameStateAPI.GetTimeDataJSO();
 		if ( !jsoTime )
 			return;
+		
+		var scoreboardTemplate;
 
-		if ( MatchStatsAPI.GetGameMode() === "competitive" )
-		{
-			_Helper_LoadSnippet( _m_cP, ( "snippet_scoreboard-classic" ) );
 
-		}
-		else if ( MatchStatsAPI.GetGameMode() === "deathmatch" )
+		switch ( GameStateAPI.GetGameModeInternalName(true) )
 		{
-			_Helper_LoadSnippet( _m_cP, "snippet_scoreboard-deathmatch" );
+			case "competitive":
+				scoreboardTemplate = "snippet_scoreboard-classic";
+				break;
+			
+			case "training":
+			case "deathmatch":
+			case "gungameprogressive":
+				scoreboardTemplate = "snippet_scoreboard-deathmatch";
+				break;
+			
+			default:
+				scoreboardTemplate = "snippet_scoreboard-classic";
+				break;
+
+			       		
+			                
+				                                                     
+				      
+			       	
 		}
-		else if ( MatchStatsAPI.GetGameMode() === "training" )
-		{
-			_Helper_LoadSnippet( _m_cP, "snippet_scoreboard-deathmatch" );
-		}			
-		else if ( MatchStatsAPI.GetGameMode() === "gungameprogressive" )
-		{
-			_Helper_LoadSnippet( _m_cP, "snippet_scoreboard-deathmatch" );
-		}
-		       	
-		                                                      
-		 
-			                                                              
-		 
-		       	
-		else                     
-		{
-			_Helper_LoadSnippet( _m_cP, "snippet_scoreboard-classic" );
-		}
+
+		_Helper_LoadSnippet( _m_cP, scoreboardTemplate );
 
 		_Helper_LoadSnippet( $( "#id-sb-meta" ), "snippet_sb-meta" );
 
@@ -2565,6 +2634,11 @@ var Scoreboard = ( function()
 		if ( MatchStatsAPI.IsTournamentMatch() )
 			_m_cP.AddClass( "IsTournamentMatch" );
 		
+		
+		                                          
+
+		_m_sortOrder = _GetSortOrderForMode( GameStateAPI.GetGameModeInternalName(true) );
+
 
 		             
 
@@ -2585,7 +2659,7 @@ var Scoreboard = ( function()
 
 	function _UpdateScore () 
 	{
-		switch ( MatchStatsAPI.GetGameMode() )
+		switch ( GameStateAPI.GetGameModeInternalName(true) )
 		{
 			case "competitive":
 				_UpdateScore_Classic();

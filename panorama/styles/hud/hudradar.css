@@ -339,6 +339,11 @@ CSGOHudRadar Label
 	flow-children: none;
 }
 
+.RadarTextMapImg
+{
+                        
+}
+
 #PI_FirstRotated
 {
 	width: 100px;

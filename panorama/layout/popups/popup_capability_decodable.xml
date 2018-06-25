@@ -64,8 +64,8 @@
 					</Panel>
 				</Panel>
 
-				<Panel id="DecodableItemsScroll" class="popup-decodable-opening hidden">
-					<Panel class="popup-decodable-opening__list" hittest="true">
+				<Panel id="DecodableItemsScroll" class="popup-decodable-opening hidden" hittest="false" hittestchildren="false">
+					<Panel class="popup-decodable-opening__list" hittest="false">
 						<Panel id="ScrollList" 
 								class="popup-decodable-opening-items-container"
 								hittest="false">
@@ -73,7 +73,7 @@
 						</Panel>
 					</Panel>
 
-					<Panel class="popup-decodable-opening__list popup-decodable-opening__list--magnified" hittest="true">
+					<Panel class="popup-decodable-opening__list popup-decodable-opening__list--magnified" hittest="false">
 						<Panel id="ScrollListMagnified" 
 								class="popup-decodable-opening-items-container"
 								hittest="false">

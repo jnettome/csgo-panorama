@@ -69,10 +69,11 @@ var AcknowledgeItems = ( function()
 		elImage.visible = false;
 		elModel.visible = false;
 
-		if ( ItemInfo.GetSlot( id ) || ItemInfo.IsSpraySealed( id ) )
+		var modelPath = ItemInfo.GetModelPathFromJSONOrAPI( id );
+
+		if ( modelPath )
 		{
 			elModel.visible = true;
-			var modelPath = ItemInfo.GetModelPathFromJSONOrAPI( id );
 			
 			                                                  
 			elModel.SetAsActivePreviewPanel();

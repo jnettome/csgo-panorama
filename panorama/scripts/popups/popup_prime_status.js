@@ -110,6 +110,9 @@ var PopupPrimeStatus = ( function ()
 
 		m_jsLoadingHandle = $.Schedule( 5.0, function ()
 		{
+			                                                                               
+			                                                            
+			m_jsLoadingHandle = false;		
 			_SetStatusPanel( "timeout" );
 		} );
 	}
@@ -119,7 +122,7 @@ var PopupPrimeStatus = ( function ()
 		if( m_elLoadingProgress.visible )
 		{
 			                  
-			if ( m_jsLoadingHandle )
+			if ( m_jsLoadingHandle !==  false )
 			{
 				$.CancelScheduled( m_jsLoadingHandle );
 				m_jsLoadingHandle = false;
@@ -175,7 +178,7 @@ var PopupPrimeStatus = ( function ()
 	{
 		_UpdateActivateButton( "#SFUI_Elevated_Status_Confirm_Btn", function()
 		{
-			MyPersonaAPI.ActionElevate( '' );
+			MyPersonaAPI.ActionElevate( false );
 			_SetStatusPanel( "loading" );
 		} );
 
@@ -251,7 +254,7 @@ var PopupPrimeStatus = ( function ()
 			"#SFUI_Elevated_Status_Switch_Btn", function()
 			{
 				_SetStatusPanel( "loading" );
-				MyPersonaAPI.ActionElevate( "takeover" );
+				MyPersonaAPI.ActionElevate( true );
 				$.DispatchEvent( 'UIPopupButtonClicked', '' );
 			},
 			"#vgui_close", function()

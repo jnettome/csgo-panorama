@@ -60,14 +60,14 @@
 	<CSGOHudReticle class="reticle" hittest="false" hittestchildren="false">
 
 		                         
-		<Panel id="Crosshair" class="crosshair">
+		<Panel id="Crosshair" class="crosshair" force-no-composition-layer="true">
 			                                                                               
 
 			                                       
-			<Image id="TopPip" class="crosshair__pip crosshair__pip--green" src="file://{images}/hud/reticle/reticlepip.svg" orientation="0" textureheight="14" />
-			<Image id="RightPip" class="crosshair__pip crosshair__pip--green" src="file://{images}/hud/reticle/reticlepip.svg" orientation="90" textureheight="14" />
-			<Image id="BottomPip" class="crosshair__pip crosshair__pip--green" src="file://{images}/hud/reticle/reticlepip.svg" orientation="180" textureheight="14" />
-			<Image id="LeftPip" class="crosshair__pip crosshair__pip--green" src="file://{images}/hud/reticle/reticlepip.svg" orientation="270" textureheight="14" />
+			<Image id="TopPip" class="crosshair__pip crosshair__pip--green" src="file://{images}/hud/reticle/reticlepip.svg" orientation="0" textureheight="10" />
+			<Image id="RightPip" class="crosshair__pip crosshair__pip--green" src="file://{images}/hud/reticle/reticlepip.svg" orientation="90" textureheight="10" />
+			<Image id="BottomPip" class="crosshair__pip crosshair__pip--green" src="file://{images}/hud/reticle/reticlepip.svg" orientation="180" textureheight="10" />
+			<Image id="LeftPip" class="crosshair__pip crosshair__pip--green" src="file://{images}/hud/reticle/reticlepip.svg" orientation="270" textureheight="10" />
 
 			<Panel id="TopArc" class="crosshair__arc crosshair__arc--horizontal" />
 			<Panel id="RightArc" class="crosshair__arc crosshair__arc--vertical" />
@@ -75,15 +75,15 @@
 			<Panel id="LeftArc" class="crosshair__arc crosshair__arc--vertical" />
 
 			<Panel class="crosshair__dot" />
-			<Image id="FriendCrosshair" class="crosshair__friend" src="file://{images}/hud/reticle/reticlefriend.svg" textureheight="27" />
+			<Image id="FriendCrosshair" class="crosshair__friend" src="file://{images}/hud/reticle/reticlefriend.svg" textureheight="28" />
 
 			                                  
-			<Image id="TopPipBlack" class="crosshair__pip crosshair__pip--black" src="file://{images}/hud/reticle/reticlepipsmall.svg" orientation="0" textureheight="14" />
-			<Image id="RightPipBlack" class="crosshair__pip crosshair__pip--black" src="file://{images}/hud/reticle/reticlepipsmall.svg" orientation="90" textureheight="14" />
-			<Image id="BottomPipBlack" class="crosshair__pip crosshair__pip--black" src="file://{images}/hud/reticle/reticlepipsmall.svg" orientation="180" textureheight="14" />
-			<Image id="LeftPipBlack" class="crosshair__pip crosshair__pip--black" src="file://{images}/hud/reticle/reticlepipsmall.svg" orientation="270" textureheight="14" />
+			<Image id="TopPipBlack" class="crosshair__pip crosshair__pip--black" src="file://{images}/hud/reticle/reticlepip.svg" orientation="0" textureheight="6" />
+			<Image id="RightPipBlack" class="crosshair__pip crosshair__pip--black" src="file://{images}/hud/reticle/reticlepip.svg" orientation="90" textureheight="6" />
+			<Image id="BottomPipBlack" class="crosshair__pip crosshair__pip--black" src="file://{images}/hud/reticle/reticlepip.svg" orientation="180" textureheight="6" />
+			<Image id="LeftPipBlack" class="crosshair__pip crosshair__pip--black" src="file://{images}/hud/reticle/reticlepip.svg" orientation="270" textureheight="6" />
 
-			<Image class="crosshair__blackcircle" src="file://{images}/hud/reticle/reticlecircle.svg" textureheight="10" />
+			<Image class="crosshair__blackcircle" src="file://{images}/hud/reticle/reticlecircle.svg" textureheight="7" />
 		</Panel>
 
 		                           

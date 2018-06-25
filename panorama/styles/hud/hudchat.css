@@ -24,6 +24,12 @@ CSGOHudChat
 	padding-bottom: 23px;
 }
 
+.ChatLabelClass
+{
+    background-color: black;
+    opacity: 0.45;
+}
+
 .ChatBG
 {
 	width: 100%;
@@ -56,6 +62,8 @@ CSGOHudChat
 	font-size: 18px;
 	font-weight: bold;
 	letter-spacing: 0px;
+
+    background-color: #00000099;
 }
 
 #ChatTextEntry

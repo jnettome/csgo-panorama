@@ -50,7 +50,8 @@
 	letter-spacing: .2px;
 	padding-left: 28px;
 	padding-bottom: 0px;
-	text-shadow-fast: 1px 1px #000000;
+	text-shadow-fast: 1px 1px #00000055;
+    background-color: gradient( linear, 100% 0%, 0% 0%, from( #00000000 ), color-stop( 0.5, #00000077 ) , color-stop(0.7, #00000077), color-stop( 0.9, #00000077 ), to( #00000000 ) );
 }
 
 .AlertPanel.AlertHidden 

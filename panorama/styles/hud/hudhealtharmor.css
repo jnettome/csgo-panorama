@@ -67,7 +67,7 @@ CSGOHudHealthArmor Label
 .hud-HA-bg
 {
                                                                                                                              
-    background-color: gradient( linear, 100% 0%, 0% 0%, from( #00000000 ), color-stop( 0.1, #00000055 ) , color-stop(0.5, #000000DD), color-stop( 0.95, #00000055 ), to( #00000000 ) );
+    background-color: gradient( linear, 100% 0%, 0% 0%, from( #00000000 ), color-stop( 0.3, #000000CC ) , color-stop(0.6, #000000CC), color-stop( 0.9, #000000BB ), to( #00000000 ) );
                        
                           
 	                              

@@ -27,6 +27,11 @@
 	transition-duration: 0.4s;
 }
 
+                                                                                     
+.hud-progress-bar.hud-progress-bar--switched
+{
+}
+
 @keyframes 'hudProgressBarCancelShake'
 {
 	0%

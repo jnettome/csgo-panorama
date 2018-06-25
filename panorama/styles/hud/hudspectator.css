@@ -884,7 +884,7 @@
 {
     font-family: Stratum2, 'Arial Unicode MS';
     font-weight: medium;
-    font-size: 21px;
+	font-size: 19px;
     text-align: left;
                         
 
@@ -897,13 +897,15 @@
                                          
     text-shadow: 0px 0px 2px 2.5 #00000033;
     color: white;
+	white-space: nowrap;
+	letter-spacing: 0px;
 }
 
 .PlayerPanel__PlayerName_R
 {
     font-family: Stratum2, 'Arial Unicode MS';
     font-weight: medium;
-    font-size: 21px;
+    font-size: 19px;
     text-align: right;
                         
 
@@ -916,6 +918,8 @@
                                          
     text-shadow: 0px 0px 2px 2.5 #00000033;
     color: white;
+    white-space: nowrap;
+    letter-spacing: 0px;
 }
 
 
