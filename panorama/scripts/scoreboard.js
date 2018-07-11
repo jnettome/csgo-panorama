@@ -104,7 +104,6 @@ var Scoreboard = ( function()
 
 		function _CalculateAllCommends ()
 		{
-
 			var localTeamName = GameStateAPI.GetPlayerTeamName( GetLocalPlayerId() );
 
 			                                                                      
@@ -137,7 +136,8 @@ var Scoreboard = ( function()
 
 			                                  
 			var localTeamName = GameStateAPI.GetPlayerTeamName( GetLocalPlayerId() );
-			_m_oTeams[ localTeamName ].CalculateAllCommends();
+			if ( _m_oTeams[ localTeamName ] )
+				_m_oTeams[ localTeamName ].CalculateAllCommends();
 
 		}
 
@@ -497,6 +497,7 @@ var Scoreboard = ( function()
 		
 		elPlayer.AddClass( "sb-team--" + newTeam );
 		
+		                                        
 		if ( IsTeamASpecTeam( newTeam ) && MatchStatsAPI.IsTournamentMatch() )
 		{
 			elPlayer.AddClass( 'hidden' );
@@ -642,7 +643,25 @@ var Scoreboard = ( function()
 	};
 	                                                
 
+	function _UpdateSpectatorButtons()
+	{
+	    var elButtonPanel = $( "#spec-button-group" );
+	    if ( !elButtonPanel ) 
+	        return;
 
+	    var nCameraMan = parseInt( GameInterfaceAPI.LookupConVarStringValue( "spec_autodirector_cameraman" ) );
+	    var bQ = ( GameStateAPI.IsLocalPlayerHLTV() && nCameraMan > -1 )
+
+	    if ( bQ )
+	    {
+	        elButtonPanel.visible = true;
+	        UpdateCasterButtons();
+	    }
+	    else
+	    {
+	        elButtonPanel.visible = false;
+	    }  
+	}
 
 	var sortOrder_default = {
 
@@ -658,7 +677,6 @@ var Scoreboard = ( function()
 		'idx': -1,
 		                                                              
 		                                                                		
-		'money': 0,
 		'hsp': 0,
 		'kdr': 0,
 		'adr':0,
@@ -897,7 +915,6 @@ var Scoreboard = ( function()
 
 		return _fn;
 	}
-
 
 
 	                                                            
@@ -1298,11 +1315,13 @@ var Scoreboard = ( function()
 					{
 						var newStatValue = GameStateAPI.GetPlayerMoney( oPlayer.m_xuid );
 
-			  			                                                                                    
-						{
-							oPlayer.m_oStats[ stat ] = newStatValue;
+						oPlayer.m_oStats[ stat ] = newStatValue;
+
+						if ( newStatValue >= 0 )
 							elLabel.text = "$" + newStatValue;
-						}
+						 else
+							elLabel.text = "";
+						
 					}
 					else
 					{
@@ -1316,6 +1335,13 @@ var Scoreboard = ( function()
 				fn = function( oPlayer, bSilent = false )
 				{
 
+					                           
+					if ( oPlayer.m_xuid === GetLocalPlayerId() )
+					{
+						if ( oPlayer.m_elPlayer && oPlayer.m_elPlayer.IsValid() )
+							oPlayer.m_elPlayer.AddClass( "sb-row--localplayer" );
+					}
+					
 					                                                  
 					var elPanel = oPlayer.m_oElStats[ stat ];
 					if ( !elPanel )
@@ -1342,43 +1368,50 @@ var Scoreboard = ( function()
 
 					elNameLabel.text = clantext + " " + nametext;                                      
 
-					                                
-					                
-					                                
-
-					function _UpdateCommendationStat ( oPlayer, commendStatName, newStatValue )
-					{
-
-						if (  GameStateAPI.IsDemoOrHltv() || IsTeamASpecTeam( GameStateAPI.GetPlayerTeamName( GetLocalPlayerId() ) ) )
-							return;
-						
-						if ( !GameStateAPI.IsXuidValid( oPlayer.m_xuid ) )
-						{
-							if ( 0 )                                                              
-								newStatValue = oPlayer.m_xuid;
-							else
-								return;
-						}
-									
-		
-						                        
-						if ( oPlayer.m_oStats[ commendStatName ] != newStatValue )
-						{
-							oPlayer.m_oStats[ commendStatName ] = newStatValue;
-
-							var  oTeam = _m_oTeams[ oPlayer.m_oStats[ 'teamname' ] ];
-
-							if ( oTeam )
-								oTeam.UpdateCommendForPlayer( oPlayer.m_xuid, commendStatName, newStatValue );							
-						}
-					}
-				
-					_UpdateCommendationStat( oPlayer, 'leader', GameStateAPI.GetPlayerCommendsLeader( oPlayer.m_xuid ) );
-					_UpdateCommendationStat( oPlayer, 'teacher', GameStateAPI.GetPlayerCommendsTeacher( oPlayer.m_xuid ) );
-					_UpdateCommendationStat( oPlayer, 'friendly', GameStateAPI.GetPlayerCommendsFriendly( oPlayer.m_xuid ) );
 				}
 				break;
+			
+			case 'leader':
+			case 'teacher':
+			case 'friendly':
+				fn = function( oPlayer, bSilent = false )
+				{
+					var newStatValue;
 
+					if (  GameStateAPI.IsDemoOrHltv() || IsTeamASpecTeam( GameStateAPI.GetPlayerTeamName( GetLocalPlayerId() ) ) )
+					return;
+				
+					if ( !GameStateAPI.IsXuidValid( oPlayer.m_xuid ) )
+					{
+						if ( 0 )                                                              
+							newStatValue = oPlayer.m_xuid;
+						else
+							return;
+					}
+					else
+					{
+						switch (stat)
+						{
+							case 'leader': newStatValue = GameStateAPI.GetPlayerCommendsLeader( oPlayer.m_xuid ); break;
+							case 'teacher': newStatValue = GameStateAPI.GetPlayerCommendsTeacher( oPlayer.m_xuid ); break;
+							case 'friendly': newStatValue = GameStateAPI.GetPlayerCommendsFriendly( oPlayer.m_xuid ); break;
+						}						
+					}
+
+
+							
+					                        
+					if ( oPlayer.m_oStats[ stat ] != newStatValue )
+					{
+						oPlayer.m_oStats[ stat ] = newStatValue;
+			
+						var  oTeam = _m_oTeams[ oPlayer.m_oStats[ 'teamname' ] ];
+			
+						if ( oTeam )
+							oTeam.UpdateCommendForPlayer( oPlayer.m_xuid, stat, newStatValue );							
+					}
+				}
+				break;
 
 			case 'flair':
 				fn = function( oPlayer, bSilent = false )
@@ -1558,7 +1591,14 @@ var Scoreboard = ( function()
 
 								if ( newStatValue > 0 )
 								{
-									imagepath = "file://{images}/icons/skillgroups/skillgroup" + newStatValue + ".svg";
+									var mode = GameStateAPI.GetGameModeInternalName( true );
+									
+									var imagePath = "skillgroup";
+
+									if ( mode == "scrimcomp2v2" )
+										imagePath = "wingman";
+									
+									imagepath = "file://{images}/icons/skillgroups/" + imagePath + newStatValue + ".svg";
 									elSkillGroupImage.RemoveClass( "hidden" );
 								}
 								else
@@ -1935,6 +1975,10 @@ var Scoreboard = ( function()
 		_CreateStatUpdateFn( 'status' );
 		_CreateStatUpdateFn( 'skillgroup' );
 
+		_CreateStatUpdateFn( 'leader' );
+		_CreateStatUpdateFn( 'teacher' );
+		_CreateStatUpdateFn( 'friendly' );
+
 		                     
 		                                     
 		                                      
@@ -1952,16 +1996,6 @@ var Scoreboard = ( function()
 		oPlayer.m_oStats = {};                       
 
 		oPlayer.m_oStats[ 'idx' ] = GameStateAPI.GetPlayerIndex( oPlayer.m_xuid );
-
-		oPlayer.m_oStats[ 'friendly' ] = 0;
-		oPlayer.m_oStats[ 'leader' ] = 0;
-		oPlayer.m_oStats[ 'teacher' ] = 0;
-
-		                           
-		if ( oPlayer.m_xuid === GetLocalPlayerId() )
-		{
-			oPlayer.m_elPlayer.AddClass( "sb-row--localplayer" );
-		}
 
 		               
 
@@ -2483,10 +2517,121 @@ var Scoreboard = ( function()
 	{
 		GameInterfaceAPI.ConsoleCommand( 'cl_borrow_music_from_player_index 0' );
 
-		var oLocalPlayer = _m_oPlayers.GetPlayerByXuid( GameStateAPI.GetLocalPlayerXuid() );
+		var oLocalPlayer = _m_oPlayers.GetPlayerByXuid( GetLocalPlayerId() );
 		_m_oUpdateStatFns[ 'musickit' ]( oLocalPlayer, true );
 	}
 
+	function UpdateCasterButtons()
+	{
+	    for ( var i = 0; i < 4; i++ )
+	    {
+	        var buttonName = "#spec-button" + (i+1);
+	        var bActive = true;
+
+	        switch ( i )
+	        {
+	            default:
+	            case 0:
+	                bActive = !!GetCasterIsCameraman(); break;
+
+	            case 1:
+	                bActive = !!GetCasterIsHeard(); break;
+
+	            case 2:
+	                bActive = !!GetCasterControlsXray(); break;
+
+	            case 3:
+	                bActive = !!GetCasterControlsUI(); break;
+	        }
+
+	        ToggleCasterButtonActive( buttonName, bActive );
+	    }
+	}
+
+	function ToggleCasterButtonActive( buttonName, bActive )
+	{
+	    var button = $( buttonName );
+	    if ( button == null )
+	        return;
+
+	    if ( bActive == false && button.BHasClass( 'sb-spectator-control-button-notactive' ) == false )
+	    {
+	        button.AddClass( 'sb-spectator-control-button-notactive' );
+	    }
+	    else if ( bActive == true && button.BHasClass( 'sb-spectator-control-button-notactive' ) == true )
+	    {
+	        button.RemoveClass( 'sb-spectator-control-button-notactive' );
+	    }
+	}
+
+
+	function _ToggleSetCasterIsCameraman( val )
+	{
+	    $.DispatchEvent( 'PlaySoundEffect', 'generic_button_press', 'MOUSE' );
+
+	    var nCameraMan = parseInt( GameInterfaceAPI.LookupConVarStringValue( "spec_autodirector_cameraman" ) );
+	    if ( GetCasterIsCameraman() )
+	    {
+	        GameStateAPI.SetCasterIsCameraman( 0 );
+	    }
+	    else
+	    {
+	        GameStateAPI.SetCasterIsCameraman( nCameraMan );
+	    }	    
+
+	    UpdateCasterButtons();
+	}
+
+	function _ToggleSetCasterIsHeard( val )
+	{
+	    $.DispatchEvent( 'PlaySoundEffect', 'generic_button_press', 'MOUSE' );
+
+	    var nCameraMan = parseInt( GameInterfaceAPI.LookupConVarStringValue( "spec_autodirector_cameraman" ) );
+	    if ( GetCasterIsHeard() )
+	    {
+	        GameStateAPI.SetCasterIsHeard( 0 );
+	    }
+	    else
+	    {
+	        GameStateAPI.SetCasterIsHeard( nCameraMan );
+	    }
+
+	    UpdateCasterButtons();
+	}
+
+	function _ToggleSetCasterControlsXray( val )
+	{
+	    $.DispatchEvent( 'PlaySoundEffect', 'generic_button_press', 'MOUSE' );
+
+	    var nCameraMan = parseInt( GameInterfaceAPI.LookupConVarStringValue( "spec_autodirector_cameraman" ) );
+	    if ( GetCasterControlsXray() )
+	    {
+	        GameStateAPI.SetCasterControlsXray( 0 );
+	        ToggleCasterButtonActive( "#spec-button3", false );
+	    }
+	    else
+	    {
+	        GameStateAPI.SetCasterControlsXray( nCameraMan );
+	        ToggleCasterButtonActive( "#spec-button3", true );
+	    }    
+	}
+
+	function _ToggleSetCasterControlsUI( val )
+	{
+	    $.DispatchEvent( 'PlaySoundEffect', 'generic_button_press', 'MOUSE' );
+
+	    var nCameraMan = parseInt( GameInterfaceAPI.LookupConVarStringValue( "spec_autodirector_cameraman" ) );
+	    if ( GetCasterControlsUI() )
+	    {
+	        GameStateAPI.SetCasterControlsUI( 0 );
+	    }
+	    else
+	    {
+	        GameStateAPI.SetCasterControlsUI( nCameraMan );
+	    } 
+
+	    UpdateCasterButtons();
+	}
 
 	                                                
 	function _CycleStats ()
@@ -2717,6 +2862,8 @@ var Scoreboard = ( function()
 
 		_UpdateAllPlayers( true );
 
+		_UpdateSpectatorButtons();
+
 	};
 
 	function _CancelUpdateJob ()
@@ -2811,6 +2958,52 @@ var Scoreboard = ( function()
 
 	}
 
+	function GetCasterIsCameraman()
+	{
+	    var nCameraMan = parseInt( GameInterfaceAPI.LookupConVarStringValue( "spec_autodirector_cameraman" ) );
+
+	    var bQ = ( GameStateAPI.IsDemoOrHltv() && nCameraMan != 0 && GameStateAPI.IsHLTVAutodirectorOn() )
+
+	    return bQ;
+	}
+
+	function GetCasterIsHeard()
+	{
+	    var bQ = false;
+
+	    if ( GameStateAPI.IsDemoOrHltv() )
+	    {
+	        var bVoiceCaster = parseInt( GameInterfaceAPI.LookupConVarStringValue( "voice_caster_enable" ) );
+	        bQ = bVoiceCaster;
+	    }
+
+	    return bQ;
+	}
+
+	function GetCasterControlIsDisabled()
+	{
+	    var bDisableWithControl = parseInt( GameInterfaceAPI.LookupConVarStringValue( "spec_cameraman_disable_with_user_control" ) );
+
+	    var bQ = ( GameStateAPI.IsDemoOrHltv() && bDisableWithControl && GameStateAPI.IsHLTVAutodirectorOn() == false );
+
+	    return bQ;
+	}
+
+	function GetCasterControlsXray()
+	{
+	    var bXRay = GameStateAPI.IsDemoOrHltv() && parseInt( GameInterfaceAPI.LookupConVarStringValue( "spec_cameraman_xray" ) );
+
+	    return bXRay;
+	}
+
+	function GetCasterControlsUI()
+	{
+	    var bSpecCameraMan = parseInt( GameInterfaceAPI.LookupConVarStringValue( "spec_cameraman_ui" ) );
+
+	    var bQ = ( GameStateAPI.IsDemoOrHltv() && bSpecCameraMan );
+
+	    return bQ;
+	}
 
 	                      
 	return {
@@ -2828,7 +3021,13 @@ var Scoreboard = ( function()
 		OnEndOfMatch: 						_OnEndOfMatch,
 		GetFreeForAllTopThreePlayers: 		_GetFreeForAllTopThreePlayers,
 		GetFreeForAllPlayerPosition: 		_GetFreeForAllPlayerPosition,
-		UnborrowMusicKit: _UnborrowMusicKit,
+		UnborrowMusicKit:                   _UnborrowMusicKit,
+
+		ToggleSetCasterIsCameraman:         _ToggleSetCasterIsCameraman,
+		ToggleSetCasterIsHeard:             _ToggleSetCasterIsHeard,
+		ToggleSetCasterControlsXray:        _ToggleSetCasterControlsXray,
+		ToggleSetCasterControlsUI:          _ToggleSetCasterControlsUI,
+
 		       
 		                                
 		       
@@ -2865,6 +3064,11 @@ var Scoreboard = ( function()
 	$.RegisterForUnhandledEvent( "Scoreboard_GetFreeForAllPlayerPosition", Scoreboard.GetFreeForAllPlayerPosition );
 
 	$.RegisterForUnhandledEvent( "Scoreboard_UnborrowMusicKit", Scoreboard.UnborrowMusicKit );
+
+	$.RegisterForUnhandledEvent( "Scoreboard_ToggleSetCasterIsCameraman", Scoreboard.ToggleSetCasterIsCameraman );
+	$.RegisterForUnhandledEvent( "Scoreboard_ToggleSetCasterIsHeard", Scoreboard.ToggleSetCasterIsHeard );
+	$.RegisterForUnhandledEvent( "Scoreboard_ToggleSetCasterControlsXray", Scoreboard.ToggleSetCasterControlsXray );
+	$.RegisterForUnhandledEvent( "Scoreboard_ToggleSetCasterControlsUI", Scoreboard.ToggleSetCasterControlsUI );
 
 	       
 	                                                                                      

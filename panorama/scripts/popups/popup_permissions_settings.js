@@ -11,6 +11,13 @@ var PopupPermissionsSettings = ( function(){
 
 	var _SyncDialogsFromSessionSettings = function ( settings )
 	{
+		if ( !LobbyAPI.IsSessionActive() )
+		{
+			                                                                      
+			                                                              
+			$.DispatchEvent( 'UIPopupButtonClicked', '' );
+			return;
+		}
 		                       
 		                                                                                   
 		                                                                               

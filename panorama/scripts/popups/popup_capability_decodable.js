@@ -671,18 +671,21 @@ var CapabilityDecodable = ( function()
 
 	var _ClosePopUp = function()
 	{
-		var elAsyncActionBarPanel = m_Inspectpanel.FindChildInLayoutFile( 'PopUpInspectAsyncBar' );
-		var elPurchase = m_Inspectpanel.FindChildInLayoutFile( 'PopUpInspectPurchaseBar' );
+		if ( m_Inspectpanel.IsValid() )
+		{ 
+			var elAsyncActionBarPanel = m_Inspectpanel.FindChildInLayoutFile( 'PopUpInspectAsyncBar' );
+			var elPurchase = m_Inspectpanel.FindChildInLayoutFile( 'PopUpInspectPurchaseBar' );
+			if ( !elAsyncActionBarPanel.BHasClass( 'hidden' ) )
+			{
+				InspectAsyncActionBar.OnEventToClose();
+			}
+			else if ( !elPurchase.BHasClass( 'hidden' ) ) 
+			{
+				InpsectPurchaseBar.ClosePopup();
+			}
 
-		if( !elAsyncActionBarPanel.BHasClass( 'hidden' ))
-		{
-			InspectAsyncActionBar.OnEventToClose();
 		}
-		else if ( !elPurchase.BHasClass( 'hidden' ) )
-		{
-			InpsectPurchaseBar.ClosePopup();
-		}
-		
+
 		_UpdateOpeningCounter.CancelTimer();
 	};
 	

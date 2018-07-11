@@ -292,7 +292,11 @@ var InspectActionBar = ( function (){
 	var _CloseBtnAction = function ( )
 	{
 		$.DispatchEvent( "PlaySoundEffect", "inventory_inspect_close", "MOUSE" );
-		InspectModelImage.CancelCharAnim( m_modelImagePanel );
+
+		if ( m_modelImagePanel.IsValid() )
+		{
+			InspectModelImage.CancelCharAnim( m_modelImagePanel );
+		}
 
 		                                                      
 		$.DispatchEvent( 'UIPopupButtonClicked', '' );

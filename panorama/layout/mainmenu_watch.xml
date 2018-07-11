@@ -55,19 +55,19 @@
 				<Panel id="watch-navbar" class="content-navbar content-navbar--short">
 					<Panel class="content-navbar__tabs">
 						<RadioButton group="WatchNavBar" onactivate="mainmenu_watch.NavigateToTab('JsTournaments', 'tournament menu button');">
-							<Label class="" text="Tournaments"/>
+							<Label class="" text="#CSGO_Watch_Cat_Tournament_0"/>
 						</RadioButton>
 						<RadioButton group="WatchNavBar" onactivate="mainmenu_watch.NavigateToTab('JsYourMatches', 'yourmatches menu button');" selected="true">
-							<Label class="" text="Your Matches"/>
+							<Label class="" text="#CSGO_Watch_Cat_YourMatches"/>
 						</RadioButton>
 						<RadioButton group="WatchNavBar" onactivate="mainmenu_watch.NavigateToTab('JsLive', 'live menu button');">
-							<Label class="" text="Live Matches"/>
+							<Label class="" text="#CSGO_Watch_Cat_LiveMatches"/>
 						</RadioButton>
 						<RadioButton group="WatchNavBar" onactivate="mainmenu_watch.NavigateToTab('JsDownloaded', 'downloaded menu button');">
-							<Label class="" text="Downloaded"/>
+							<Label class="" text="#CSGO_Watch_Cat_Downloaded"/>
 						</RadioButton>
 						<RadioButton group="WatchNavBar" onactivate="mainmenu_watch.NavigateToTab('JsStreams', 'streams menu button');">
-							<Label class="" text="Streams"/>
+							<Label class="" text="#CSGO_Watch_Cat_Streams"/>
 						</RadioButton>
 					</Panel>
 					<Panel class="horizontal-align-right vertical-center left-right-padding">	

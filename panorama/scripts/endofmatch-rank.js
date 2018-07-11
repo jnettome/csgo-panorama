@@ -16,23 +16,11 @@ var EOM_Rank = (function () {
 
 		if ( GameStateAPI.IsDemoOrHltv() )
 		{
-			_End();
 			return false;
 		}
 
 		if ( !_m_cP.bXpDataReady )
 		{
-			                          
-			if ( _m_cP.Data().m_retries++ >= 2 )
-			{
-				_End();
-				return false;
-			}
-			else
-			{
-				$.Schedule( 1.0, _DisplayMe );
-			}
-			
 			return false;
 		}
 
@@ -93,6 +81,15 @@ var EOM_Rank = (function () {
 
 			var duration = sPerXp * xp;
 
+			var sPerSoundTick = 0.01;
+			for ( var t = sPerSoundTick; t < duration; t += sPerSoundTick )
+			{
+				$.Schedule( animTime + t, function()
+				{
+					$.DispatchEvent( 'PlaySoundEffect', 'UIPanorama.XP.Ticker', 'eom-rank' );
+				});
+			}
+
 			$.Schedule( animTime, function()
 			{
 
@@ -104,16 +101,36 @@ var EOM_Rank = (function () {
 
 				        
 				var colorClass;
+				var soundEvent = null;
 				if ( reason == "old" )
+				{
 					colorClass = "eom-rank__blue";
+					soundEvent = "UIPanorama.XP.Milestone_01";
+				}
 				else if ( reason == "levelup" )
+				{
 					colorClass = "eom-rank__purple";
+				}
 				else if ( reason == "6" || reason == "7" )
+				{
 					colorClass = "eom-rank__yellow";
+					soundEvent = "UIPanorama.XP.Milestone_02";
+				}
 				else if ( reason == "9" || reason == "10" || reason == "59" )
+				{
 					colorClass = "eom-rank__yellow";
+					soundEvent = "UIPanorama.XP.Milestone_03";
+				}
 				else
+				{
 					colorClass = "eom-rank__green";
+					soundEvent = "UIPanorama.XP.Milestone_04";
+				}
+
+				if ( soundEvent != null )
+				{
+					$.DispatchEvent( 'PlaySoundEffect', soundEvent, 'eom-rank' );
+				}
 
 				elRankSegment.AddClass( colorClass );
 
@@ -227,6 +244,7 @@ var EOM_Rank = (function () {
 			_AnimSequenceNext( function()
 			{
 
+				$.DispatchEvent( 'PlaySoundEffect', 'UIPanorama.XP.BarFull', 'eom-rank' );
 				_m_cP.FindChildTraverse( "id-eom-rank__bar--shine" ).AddClass( "eom-rank__bar--shine--on" );
 
 			}, 1 );
@@ -234,7 +252,8 @@ var EOM_Rank = (function () {
 			           
 			_AnimSequenceNext( function()
 			{
-				
+				$.DispatchEvent( 'PlaySoundEffect', 'UIPanorama.XP.NewRank', 'eom-rank' );
+
 				                             
 				if ( elCurrentListerItem )
 				{

@@ -10,13 +10,13 @@ var EOM_Voting = (function () {
 
 	var _m_elVoteItemPanels = {};
 	var _m_updateJob = undefined;
-	var _m_InRandomSequence = false;
+	var m_randIdx = 0;
 	
-	function _DisplayMe() {
+	function _DisplayMe ()
+	{
 
 		if ( GameStateAPI.IsDemoOrHltv() )
 		{
-			_End();
 			return false;
 		}
 
@@ -24,7 +24,10 @@ var EOM_Voting = (function () {
 		var oTime = GameStateAPI.GetTimeDataJSO();
 
 		if ( !oTime )
+		{ 
 			return false;
+		}
+		
 
 		_m_pauseBeforeEnd = oTime[ "time" ];
 
@@ -33,7 +36,6 @@ var EOM_Voting = (function () {
 
 		if ( !oMatchEndVoteData || !oMatchEndVoteData[ "voting_options" ] )
 		{
-			_End();
 			return false;
 		}
 
@@ -222,16 +224,38 @@ var EOM_Voting = (function () {
 					var arrWinners = _GetWinningMaps();
 
 					                 
-					var randIdx = Math.floor( Math.random() * arrWinners.length );
+					                                                              
+
+					var randIdx;
+
+					if ( arrWinners.length > 2 )
+					{
+						randIdx = Math.floor( Math.random() * arrWinners.length );
+					}
+
+					if ( arrWinners.length <= 2 || randIdx == m_randIdx )
+					{
+						m_randIdx++;
+					}
+					else
+					{
+						m_randIdx = randIdx;
+					}
+					
+					
+					if ( m_randIdx >= arrWinners.length )
+					{
+						m_randIdx = 0;
+					}
 
 					var elMapSelectionList = _m_cP.FindChildInLayoutFile( 'id-map-selection-list' );
 
-					var elVoteItem = elMapSelectionList.FindChildTraverse( "id-vote-item--" + arrWinners[ randIdx ] );
+					var elVoteItem = elMapSelectionList.FindChildTraverse( "id-vote-item--" + arrWinners[ m_randIdx ] );
 					var panelToHilite = elVoteItem.FindChildTraverse( "id-map-selection-btn__gradient" );
 					
-					$.Schedule( 0, function() { panelToHilite.AddClass( "map-selection-btn__gradient--whiteout" ); });
-					$.Schedule( .5, function() { panelToHilite.RemoveClass( "map-selection-btn__gradient--whiteout" ); } );
-					
+					panelToHilite.RemoveClass( "map-selection-btn__gradient--whiteout" );
+					panelToHilite.AddClass( "map-selection-btn__gradient--whiteout" );
+
 					_m_updateJob = $.Schedule( 0.3, _UpdateVotes );
 					return;
 				}
@@ -282,7 +306,7 @@ var EOM_Voting = (function () {
 		{
 			EndOfMatch.SwitchToPanel( 'eom-voting' );
 
-			EndOfMatch.StartDisplayTimer( _m_pauseBeforeEnd );
+			                                                     
 			
 			$.Schedule( _m_pauseBeforeEnd, _End );
 		}

@@ -214,7 +214,8 @@ var matchInfo = ( function() {
                     _ShowButton( elDownloadFailedButton, false );
 				}
 				
-				_EnableButton( elShareLinkButton, ( elParentPanel.matchShareToken != "" ) && ( elParentPanel.matchShareToken != undefined ) );
+                _EnableButton( elShareLinkButton, ( elParentPanel.matchShareToken != "" ) && ( elParentPanel.matchShareToken != undefined ) );
+                
 				
 				elDownloadButton.SetPanelEvent( 'onmouseover', function(){ UiToolkitAPI.ShowTextTooltipOnPanel( elDownloadButton, szDownloadButtonHint ); } );
 				elDownloadButton.SetPanelEvent( 'onmouseout', function() { UiToolkitAPI.HideTextTooltip(); } );
@@ -377,6 +378,49 @@ var matchInfo = ( function() {
         elParentPanel.AddClass( 'mi-sb--hidden' );
     }
 
+                                                         
+    function _ResizeRoundStatBars( elParentPanel )
+    {
+        if ( elParentPanel.matchListDescriptor === 'live' )
+        {
+            return;
+        }
+
+        var elStatsContainer = elParentPanel.FindChildInLayoutFile( 'id-mi-round-stats__container' );
+        var elTickLabels = elParentPanel.FindChildInLayoutFile( 'id-mi-round-stats__tick-labels' );
+
+        var totalBars = elStatsContainer.Children().length;
+
+        if ( totalBars == 0 )
+        {
+            return;
+        }
+
+        var statsContainerWidth = 900;
+        var elRoot = $.GetContextPanel().Data().elMainMenuRoot;
+        if ( elRoot && ( elRoot.BHasClass( "AspectRatio4x3" ) || elRoot.BHasClass( "AspectRatio5x4" ) ) ) 
+        {
+            statsContainerWidth = 750;
+        }
+
+        var totalBars = elStatsContainer.Children().length;
+
+        var barWidth = Math.floor( statsContainerWidth/totalBars );
+        var labelContainerWidth = ( totalBars + 2 ) * barWidth + 'px';
+        barWidth = barWidth + 'px';
+        
+        elTickLabels.style.width = labelContainerWidth;
+
+        for ( var i = 1; i <= totalBars; i++ )
+        {
+            var elRoundStats = elStatsContainer.GetChild( i-1 );
+            var elRoundBar = elRoundStats.FindChildTraverse( 'id-mi-round-summary-bar__container' );
+            var elIconContainer = elRoundStats.FindChildTraverse( 'id-mi-icons__container');
+            elRoundBar.style.width = barWidth;
+            elIconContainer.style.width = barWidth;
+        }
+    }
+
     function _FillRoundStats( elParentPanel, elPlayerRow )
     {
         var tickPattern = [ 
@@ -453,7 +497,7 @@ var matchInfo = ( function() {
 
         var elStatsContainer = elParentPanel.FindChildInLayoutFile( 'id-mi-round-stats__container' );
         var elTickLabels = elParentPanel.FindChildInLayoutFile( 'id-mi-round-stats__tick-labels' );
-        var playedRounds = MatchInfoAPI.GetMatchRoundScoreForTeam( elParentPanel.matchId, 0 ) + MatchInfoAPI.GetMatchRoundScoreForTeam( elParentPanel.matchId, 1 );
+		var playedRounds = MatchInfoAPI.GetMatchRoundScoreForTeam( elParentPanel.matchId, 0 ) + MatchInfoAPI.GetMatchRoundScoreForTeam( elParentPanel.matchId, 1 );
         var totalRounds = 30 >= playedRounds ? 30 : playedRounds;
         var nOvertime = Math.ceil( ( totalRounds - 30 ) / 6 );
         if ( nOvertime > 0 )
@@ -462,16 +506,11 @@ var matchInfo = ( function() {
         }
         var totalBars = elStatsContainer.Children().length;
 
-        var barWidth = Math.floor( 900/totalRounds );
-        var labelContainerWidth = ( totalRounds + 2 ) * barWidth + 'px';
-        barWidth = barWidth + 'px';
-
                                
 
         if ( ( totalBars === 0 ) && ( totalRounds > 30 ) )
         {
                                                                           
-            elTickLabels.style.width = labelContainerWidth;
             elTickLabels.FindChildInLayoutFile('id-mi-tick-label--last').AddClass( 'hide' );
 
             var elOTStartContainer = $.CreatePanel( 'Panel', elTickLabels, "" );
@@ -499,28 +538,29 @@ var matchInfo = ( function() {
             }
         }
 
-                                
-
-        var roundWins = MatchInfoAPI.GetMatchPlayerRoundStats( elParentPanel.matchId, elParentPanel.activePlayerRow.playerXuid, "round_wins" );
-        roundWins = roundWins.split( ',' );
-        var mvps = MatchInfoAPI.GetMatchPlayerRoundStats( elParentPanel.matchId, elParentPanel.activePlayerRow.playerXuid, "mvps" );
-        mvps = mvps.split( ',' );
-        var kills = MatchInfoAPI.GetMatchPlayerRoundStats( elParentPanel.matchId, elParentPanel.activePlayerRow.playerXuid, "enemy_kills" );
-        kills = kills.split( ',' );
-        var headshots = MatchInfoAPI.GetMatchPlayerRoundStats( elParentPanel.matchId, elParentPanel.activePlayerRow.playerXuid, "enemy_headshots" );
-        headshots = headshots.split( ',' );
-        var deaths = MatchInfoAPI.GetMatchPlayerRoundStats( elParentPanel.matchId, elParentPanel.activePlayerRow.playerXuid, "deaths" );
-        deaths = deaths.split( ',' );
+		                        
+		var roundWins = MatchInfoAPI.GetMatchPlayerRoundStats( elParentPanel.matchId, elParentPanel.activePlayerRow.playerXuid, "round_wins" );
+		roundWins = roundWins ? roundWins.split( ',' ) : Array( totalRounds ).fill( 0 );
+		var mvps = MatchInfoAPI.GetMatchPlayerRoundStats( elParentPanel.matchId, elParentPanel.activePlayerRow.playerXuid, "mvps" );
+		mvps = mvps ? mvps.split( ',' ) : Array( totalRounds ).fill( 0 );
+		var kills = MatchInfoAPI.GetMatchPlayerRoundStats( elParentPanel.matchId, elParentPanel.activePlayerRow.playerXuid, "enemy_kills" );
+		kills = kills ? kills.split( ',' ) : Array( totalRounds ).fill( 0 );
+		var headshots = MatchInfoAPI.GetMatchPlayerRoundStats( elParentPanel.matchId, elParentPanel.activePlayerRow.playerXuid, "enemy_headshots" );
+		headshots = headshots ? headshots.split( ',' ) : Array( totalRounds ).fill( 0 );
+		var deaths = MatchInfoAPI.GetMatchPlayerRoundStats( elParentPanel.matchId, elParentPanel.activePlayerRow.playerXuid, "deaths" );
+		deaths = deaths ? deaths.split( ',' ) : Array( totalRounds ).fill( 0 );
 
                    
+        var canWatch = MatchInfoAPI.CanWatch( elParentPanel.matchId );
 
         for ( var i = 1; i <= totalRounds; i++ )
         {
             var elRoundStats = undefined;
             if ( i > totalBars )
             {
-                elRoundStats = $.CreatePanel( 'Panel', elStatsContainer, 'id-stat-bar-round' + i );
+                elRoundStats = $.CreatePanel( 'Button', elStatsContainer, 'id-stat-bar-round' + i );
                 elRoundStats.BLoadLayoutSnippet( 'snippet_mi-round-summary-bar' );
+                elRoundStats.AddClass( 'round-selection-button' );
             }
             else
             {
@@ -531,10 +571,7 @@ var matchInfo = ( function() {
             var elIconContainer = elRoundStats.FindChildTraverse( 'id-mi-icons__container');
 
             if ( i > totalBars )
-            {
-                elRoundBar.style.width = barWidth;
-                elIconContainer.style.width = barWidth;
-                
+            {                
                 var elTick = elRoundBar.GetChild( 2 ).GetChild( 1 );
 
                 if ( i <= 30 )                   
@@ -567,9 +604,33 @@ var matchInfo = ( function() {
                 elWinBar.AddClass( 'mi-round-summary-bar--EMPTY' );
                 elLossBar.AddClass( 'mi-round-summary-bar--EMPTY' );
                 elIconContainer.AddClass( 'hide' );
+                elRoundStats.AddClass( 'no-hover' );
             }
             else
             {
+                if ( !canWatch ) 
+                {
+                    elRoundStats.AddClass( 'no-hover' );
+                }
+                else
+                {
+                    elRoundStats.style.tooltipPosition = "bottom";
+                    elRoundStats.style.tooltipBodyPosition = "50% 0%"
+                    function _OnRoundMouseOver( elButton )
+                    {
+                        UiToolkitAPI.ShowTextTooltipOnPanel( elButton, $.Localize( "#CSGO_Watch_Round" ) );
+                    }
+
+                    function _OnRoundActivate( nMatch, nRound )
+                    {
+                        MatchInfoAPI.Watch( nMatch, nRound );
+                    }
+
+                    elRoundStats.SetPanelEvent( 'onmouseover', _OnRoundMouseOver.bind( undefined, elRoundStats ) );
+                    elRoundStats.SetPanelEvent( 'onmouseout', function(){ UiToolkitAPI.HideTextTooltip(); } );
+                    elRoundStats.SetPanelEvent( 'onactivate', _OnRoundActivate.bind( undefined, elParentPanel.matchId, i ) );
+                    
+                }
                 elIconContainer.RemoveClass( 'hide' );
 
                 var n = i-1;
@@ -646,6 +707,7 @@ var matchInfo = ( function() {
                 currentTeamId = flipBit( currentTeamId );
             }
         }
+        _ResizeRoundStatBars( elParentPanel );
 	}
 	
 	function _OpenPlayerCard( xuid )
@@ -931,7 +993,8 @@ var matchInfo = ( function() {
 	return {
         Init                    : _Init,
         Hide                    : _Hide,
-        Refresh                 : _Refresh
+        Refresh                 : _Refresh,
+        ResizeRoundStatBars     : _ResizeRoundStatBars
     };
 
 })();

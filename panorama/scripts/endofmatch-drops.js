@@ -13,38 +13,12 @@ var EOM_Drops = (function () {
 
 	var _DisplayMe = function() {
 
-		if ( GameStateAPI.IsDemoOrHltv() )
-		{
-			_End();
-			return false;
-		}
-
-		                           
-		                                      
-		    
-		   	       
-		   	             
-		    
-		                                      
-		    
-		   	                          
-		   	                                    
-		   	 
-		   		       
-		   		             
-		   	 
-		   	    
-		   	 
-		   		                              
-		   	 
-
-		   	             
-		    
-
 		var oDropList = _m_cP.DropListJSO;
 
 		if ( Object.keys( oDropList ).length == 0 )
-			return false;	
+		{
+			return false;
+		}
 
 		var animTime = 0;
 

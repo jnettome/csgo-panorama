@@ -11,7 +11,7 @@
 	flow-children: down;
 	max-height: 620px;
 	vertical-align: bottom;
-	margin: 0px 64px 96px 64px;
+	padding: 0px 64px 96px 64px;
 	transform: translateY( 0% );
 	visibility: visible;
 

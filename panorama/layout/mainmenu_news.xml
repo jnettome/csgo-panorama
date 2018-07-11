@@ -33,7 +33,7 @@
 
 	<Panel class="news-panel">
 		<Panel class="news-panel-navbar">
-			<Label id="Title" html="false" text="#News" />
+			<Label id="Title" html="false" text="#SFUI_MainMenu_News_Title" />
 		</Panel>
 		<Panel id="NewsPanelLister" class="news-panel__list vscroll">
 			

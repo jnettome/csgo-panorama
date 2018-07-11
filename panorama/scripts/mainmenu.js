@@ -240,6 +240,7 @@ var MainMenu = ( function() {
 		if( !$.GetContextPanel().FindChildInLayoutFile( tab ) )
 		{
 			var newPanel = $.CreatePanel('Panel', _m_elContentPanel, tab );
+			newPanel.Data().elMainMenuRoot = $.GetContextPanel();
 			                                                 
 
 			newPanel.BLoadLayout('file://{resources}/layout/' + XmlName + '.xml', false, false );
@@ -258,6 +259,10 @@ var MainMenu = ( function() {
 						newPanel.visible = false;
 						newPanel.SetReadyForDisplay( false );
 						return true;
+					}
+					else if ( newPanel.visible === true )
+					{
+						$.DispatchEvent( 'MainMenuTabShown', tab );
 					}
 				}
 
@@ -445,14 +450,14 @@ var MainMenu = ( function() {
 
 	function _OnQuitButtonPressed()
 	{	
-		UiToolkitAPI.ShowGenericPopupTwoOptionsBgStyle('Confirm Exit',
-			'Are you sure you want to quit?',
+		UiToolkitAPI.ShowGenericPopupTwoOptionsBgStyle( '#UI_ConfirmExitTitle',
+			'#UI_ConfirmExitMessage',
 			'',
-			'Quit',
+			'#UI_Quit',
 			function() {
 				QuitGame( 'Option1' );
 			},
-			'Return',
+			'#UI_Return',
 			function() {
 			},
 			'dim'

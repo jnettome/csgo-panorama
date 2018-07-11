@@ -143,6 +143,51 @@
 	sound: "UIPanorama.sidemenu_select";
 }
 
+.MatchTile.MatchVictory
+{
+    background-color: gradient( linear, 0% 0%, 100% 0%, from( #00000000), color-stop( 0, #00FF0025  ), color-stop( 0, #00FF0025  ), color-stop( 0, #00FF0025  ), to( #00FF0000 ) );
+}
+
+.MatchTile.MatchTied
+{
+    background-color: gradient( linear, 0% 0%, 100% 0%, from( #00000000), color-stop( 0, #00FF0010  ), color-stop( 0, #00FF0010  ), color-stop( 0, #00FF0010  ), to( #00FF0000 ) );
+}
+
+.MatchTile.MatchLoss
+{
+    background-color: gradient( linear, 0% 0%, 100% 0%, from( #00000000), color-stop( 0, #FF000010 ), color-stop( 0, #FF000010 ), color-stop( 0, #FF000010  ), to( #FF000000 ) );
+}
+
+.MatchTile.MatchLoss:enabled:hover
+{
+	background-color:gradient( linear, 0% 0%, 100% 0%, from( white ), color-stop( 0.0125, white ), color-stop( 0.0125, #ff000040 ), color-stop( 0.025, #FF000010 ), to( #FF000000 ) );
+}
+
+.MatchTile.MatchLoss:selected
+{
+	background-color:gradient( linear, 0% 0%, 100% 0%, from( white ), color-stop( 0.025, white ), color-stop( 0.025, #ff666640 ), color-stop( 0.053, #FFAAAA10 ), to( #FF000000 ) );
+}
+
+.MatchTile.MatchTied:enabled:hover
+{
+	background-color:gradient( linear, 0% 0%, 100% 0%, from( white ), color-stop( 0.0125, white ), color-stop( 0.0125, #66FF6640 ), color-stop( 0.025, #00FF0010 ), to( #00FF0000 ) );
+}
+
+.MatchTile.MatchTied:selected
+{
+	background-color:gradient( linear, 0% 0%, 100% 0%, from( white ), color-stop( 0.025, white ), color-stop( 0.025, #66FF6640 ), color-stop( 0.053, #AAFFAA10 ), to( #00FF0000 ) );
+}
+
+.MatchTile.MatchVictory:enabled:hover
+{
+	background-color:gradient( linear, 0% 0%, 100% 0%, from( white ), color-stop( 0.0125, white ), color-stop( 0.0125, #66FF6640 ), color-stop( 0.025, #00FF0025 ), to( #00FF0000 ) );
+}
+
+.MatchTile.MatchVictory:selected
+{
+	background-color:gradient( linear, 0% 0%, 100% 0%, from( white ), color-stop( 0.025, white ), color-stop( 0.025, #66FF6640 ), color-stop( 0.053, #AAFFAA25 ), to( #00FF0000 ) );
+}
+
 .StreamBox
 {
 	padding: 0px;

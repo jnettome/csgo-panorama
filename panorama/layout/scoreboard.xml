@@ -191,7 +191,35 @@
 					</Panel>
 				</Panel>
 
-				<Label id="id-sb-mouse-instructions" text="#Scoreboard_Mouse_Enable_Instruction" />
+        
+
+        <Panel class="sb-footer-panel">
+          <Panel id="spec-button-group" class="sb-spectator-control-panel">
+            <Button id="spec-button1" class="IconButton sb-spectator-control-button" onactivate="$.DispatchEvent('Scoreboard_ToggleSetCasterIsCameraman');" 
+              onmouseover="UiToolkitAPI.ShowTextTooltip( 'spec-button1', '#CSGO_Scoreboard_CastButton_Camera_Tooltip' );"
+						  onmouseout="UiToolkitAPI.HideTextTooltip();">
+              <Image src="file://{images}/icons/ui/camera.svg"/>
+            </Button>
+            <Button id="spec-button2" class="IconButton sb-spectator-control-button" onactivate="$.DispatchEvent('Scoreboard_ToggleSetCasterIsHeard');" 
+              onmouseover="UiToolkitAPI.ShowTextTooltip( 'spec-button2', '#CSGO_Scoreboard_CastButton_Voice_Tooltip' );"
+						  onmouseout="UiToolkitAPI.HideTextTooltip();">
+              <Image src="file://{images}/icons/ui/unmuted.svg"/>
+            </Button>
+            <Button id="spec-button3" class="IconButton sb-spectator-control-button" onactivate="$.DispatchEvent('Scoreboard_ToggleSetCasterControlsXray');" 
+              onmouseover="UiToolkitAPI.ShowTextTooltip( 'spec-button3', '#CSGO_Scoreboard_CastButton_XRay_Tooltip' );"
+						  onmouseout="UiToolkitAPI.HideTextTooltip();">
+              <Image src="file://{images}/icons/ui/ct_silhouette.svg"/>
+            </Button>
+            <Button id="spec-button4" class="IconButton sb-spectator-control-button" onactivate="$.DispatchEvent('Scoreboard_ToggleSetCasterControlsUI');" 
+              onmouseover="UiToolkitAPI.ShowTextTooltip( 'spec-button4', '#CSGO_Scoreboard_CastButton_UI_Tooltip' );"
+						  onmouseout="UiToolkitAPI.HideTextTooltip();">
+              <Image src="file://{images}/icons/ui/menu.svg"/>
+            </Button>
+          </Panel>
+          <Label id="id-sb-mouse-instructions" text="#Scoreboard_Mouse_Enable_Instruction" />
+        </Panel>
+        
+				
 
 			</Panel>
 		</snippet>
@@ -293,7 +321,7 @@
 				<Panel				data-stat="rank" />
 				<Panel				data-stat="avatar"/>
 				<Panel				data-stat="name" >	
-					<Panel id="id-sb-name__nameicons" class="sb-team-tint">
+					<Panel id="id-sb-name__nameicons">
 						<Image id="id-sb-skillgroup-image" 
 							class="hidden" 
 							src="" 
@@ -341,7 +369,7 @@
 				<Panel				data-stat="rank" />				
 				<Panel				data-stat="avatar" />
 				<Panel				data-stat="name" >	
-					<Panel id="id-sb-name__nameicons" class="sb-team-tint">
+					<Panel id="id-sb-name__nameicons">
 						<Image id="id-sb-name__commendations__leader" 
 							class="hidden sb-team-tint" 
 							src="file://{images}/icons/ui/leader.svg" />
@@ -381,7 +409,7 @@
 				<Panel				data-stat="rank" />				
 				<Panel				data-stat="avatar" />
 				<Panel				data-stat="name" >	
-					<Panel id="id-sb-name__nameicons" class="sb-team-tint">
+					<Panel id="id-sb-name__nameicons">
 						<Image id="id-sb-name__commendations__leader" 
 							class="hidden sb-team-tint" 
 							src="file://{images}/icons/ui/leader.svg" />
@@ -414,7 +442,7 @@
 				<Panel				data-stat="rank" />
 				<Panel				data-stat="avatar" />
 				<Panel				data-stat="name" >	
-					<Panel id="id-sb-name__nameicons" class="sb-team-tint">
+					<Panel id="id-sb-name__nameicons">
 						<Image id="id-sb-name__musickit" 
 							class="hidden sb-team-tint" 
 							src="file://{images}/icons/ui/music_kit.svg" />
@@ -446,7 +474,7 @@
 				<Panel				data-stat="rank" />
 				<Panel				data-stat="avatar" />
 				<Panel				data-stat="name" >	
-					<Panel id="id-sb-name__nameicons" class="sb-team-tint">
+					<Panel id="id-sb-name__nameicons">
 						<Image id="id-sb-name__musickit" 
 							class="hidden sb-team-tint" 
 							src="file://{images}/icons/ui/music_kit.svg" />

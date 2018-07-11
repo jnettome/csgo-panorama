@@ -15,7 +15,7 @@
 						useglobalcontext="true"
 						popupbackground="dim"
 						onload="PopupPermissionsSettings.Init();">
-		<Label class="PopupTitle" text="#Permissions Settings" />
+		<Label class="PopupTitle" text="#permissions_title" />
 
 		                                                                             
 
@@ -64,9 +64,9 @@
 
 			<Panel class="PopupButtonRow">
 				<TextButton class="PopupButton" 
-							text="Apply Settings" 
+							text="#permissions_apply" 
 							onactivate="PopupPermissionsSettings.ApplySessionSettings();" />
-				<TextButton class="PopupButton" text="Cancel" onactivate="UIPopupButtonClicked()" />
+				<TextButton class="PopupButton" text="#Cancel" onactivate="UIPopupButtonClicked()" />
 			</Panel>
 		</Panel>
 	

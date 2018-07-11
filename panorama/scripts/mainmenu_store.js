@@ -18,6 +18,8 @@ var MainMenuStore = ( function()
 
 		_MakeCarousel( itemsByCategory );
 		_SortTabs();
+
+		_AccountWalletUpdated();
 	};
 
 	var _GetStoreItems = function( itemsByCategory )
@@ -209,6 +211,9 @@ var MainMenuStore = ( function()
 
 	var _PrePopulateCarousel = function( prop )
 	{
+		if ( !m_pendingItemsToPopulateScheduled[ prop ].m_itemsList )
+			return false;
+
 		if ( m_pendingItemsToPopulateScheduled[prop].m_idx >= m_pendingItemsToPopulateScheduled[prop].m_itemsList.length )
 			return false;
 
@@ -340,6 +345,7 @@ var MainMenuStore = ( function()
 			}
 		};
 
+		NewPostition( tabList.find(function (obj) { return obj.id === 'market'; } ) );
 		NewPostition( tabList.find(function (obj) { return obj.id === 'keys'; } ) );
 		NewPostition( tabList.find(function (obj) { return obj.id === 'store'; } ) );
 		NewPostition( tabList.find(function (obj) { return obj.id === 'coupons'; } ) );
@@ -424,8 +430,24 @@ var MainMenuStore = ( function()
 		delete m_pendingItemsToPopulateByTab['coupons'];                                                      
 	};
 
+	var _AccountWalletUpdated = function()
+	{
+		var balance = ( MyPersonaAPI.GetLauncherType() === 'perfectworld' ) ? StoreAPI.GetAccountWalletBalance() : '';
+		var elBalance = m_elStore.FindChildInLayoutFile( 'StoreNaveBarWalletBalance' );
+		if ( balance === '' || balance === undefined || balance === null )
+		{
+			elBalance.AddClass( 'hidden' );
+		}
+		else
+		{
+			elBalance.SetDialogVariable( 'balance', balance );
+			elBalance.RemoveClass( 'hidden' );
+		}
+	}
+
 	return {
 		Init: _Init,
+		AccountWalletUpdated : _AccountWalletUpdated,
 		OnNavigateTab: _OnNavigateTab,
 		RefreshCoupons : _RefreshCoupons
 	};
@@ -434,6 +456,7 @@ var MainMenuStore = ( function()
 ( function()
 {
 	MainMenuStore.Init();
+	$.RegisterForUnhandledEvent( 'PanoramaComponent_Store_AccountWalletUpdated', MainMenuStore.AccountWalletUpdated );
 	$.RegisterForUnhandledEvent( 'PanoramaComponent_Store_PriceSheetChanged', MainMenuStore.Init );
 	$.RegisterForUnhandledEvent( 'PanoramaComponent_Store_PurchaseCompleted', MainMenuStore.RefreshCoupons );
 } )();

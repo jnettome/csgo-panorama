@@ -60,4 +60,5 @@
     $.DefineEvent( 'ShowResetMusicVolumePopup', 1, 'itemid', 'When a user is trying to equip a musickit but has thier music volume off from inventory' );
     $.DefineEvent( 'ShowTradeUpPanel', 0, '', 'Show trade up panel' );
     $.DefineEvent( 'UpdateTradeUpPanel', 0, '', 'Update trade up panel' );
+    $.DefineEvent( 'MainMenuTabShown', 1, 'tabid', 'Alert main menu tabs when they are shown, in case there is a data update needed' );
 })();

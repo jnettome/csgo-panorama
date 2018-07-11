@@ -481,6 +481,50 @@
 	opacity: 0.3;
 }
 
+.round-selection-button
+{
+	brightness:1.0;
+}
+
+.round-selection-button:not(.no-hover):hover
+{
+	brightness:2;
+}
+
+.round-selection-button:not(.no-hover):hover .mi-round-summary-bar__border > .sb-tint--TERRORIST
+{
+	opacity:1;
+	wash-color:white;
+}
+
+.round-selection-button:not(.no-hover):hover .sb-tint--TERRORIST
+{
+	opacity:1;
+	brightness:2;
+}
+
+.round-selection-button:not(.no-hover):hover .sb-tint--CT
+{
+	opacity:1;
+	brightness:2;
+}
+
+.round-selection-button:not(.no-hover):hover  .mi-icons__eliminations--bottom
+{
+	brightness:2.0;
+}
+
+.round-selection-button:not(.no-hover):hover  .mi-round-summary-bar-loss__fill
+{
+	brightness:4.0;
+}
+
+.round-selection-button:not(.no-hover):hover .mi-round-summary-bar--EMPTY
+{
+	wash-color:white;
+	opacity:0.15;
+}
+
                     
  
 	                         

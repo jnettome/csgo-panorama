@@ -60,6 +60,44 @@ Label {
 	width: left-panel-width;                                            
 }
 
+.sb-footer-panel
+{
+    width: 100%;
+    height: 48px;
+}
+.sb-spectator-control-panel
+{
+    flow-children: right;
+    horizontal-align: left;
+    vertical-align:bottom;
+    margin-bottom: 10px;
+    margin-left: -2px;
+}
+
+.sb-spectator-control-button
+{
+    margin: 1px;
+    width: 24px;
+    height: 24px;
+    border-radius: 0px;
+
+    transition-duration: 0.1s;
+}
+
+.sb-spectator-control-button Image
+{
+    margin: 4px;
+    wash-color: #AAAAAADD;
+                                           
+    img-shadow:0px 0px 1px 2.0 #00000066;
+}
+
+.sb-spectator-control-button-notactive Image
+{
+    wash-color: #664444FF;
+                                           
+}
+
 #id-sb-mouse-instructions{
 
 	font-size: 12px;
@@ -1291,9 +1329,15 @@ Label.sb-row__cell--mvps__count {
 .eom-scoreboard .sb-row__cell--status,
 .eom-scoreboard #id-sb-mouse-instructions,
 .eom-scoreboard #id-sb-meta__musickit,
+.eom-scoreboard .sb-row__cell--money Label,
  {
 	visibility: collapse;
  }
+
+ .eom-scoreboard .sb-row__cell--money
+{
+	background-color: cell-background-dark;
+}
 
  .eom-scoreboard .sb-meta,
  {

@@ -24,6 +24,10 @@ var mainmenu_watch_tournament = (function () {
         if ( tab === "JsTournamentMatches" )
         {
             matchList.UpdateMatchList( pressedTab, tournament_id );
+            if ( _m_activeTab.activeMatchInfoPanel )
+            {
+                matchInfo.ResizeRoundStatBars( _m_activeTab.activeMatchInfoPanel );
+            }
         }
               
          
@@ -875,6 +879,21 @@ var mainmenu_watch_tournament = (function () {
         $.DispatchEvent( 'CloseSubMenuContent' );
     }
 
+    function _Refresh( tabid )
+    {
+        if ( tabid === 'JsWatch' )
+        {
+            if ( _m_activeTab )
+            {
+                if ( _m_activeTab.activeMatchInfoPanel )
+                {
+                    matchInfo.ResizeRoundStatBars( _m_activeTab.activeMatchInfoPanel );
+                    matchList.ReselectActiveTile( _m_activeTab );
+                }
+            }
+        }
+    }
+
 
     function _Init()
     {
@@ -884,6 +903,7 @@ var mainmenu_watch_tournament = (function () {
                                                                                             
         _m_initalizeHandler = $.RegisterForUnhandledEvent( "InitializeTournamentsPage", _InitializeTournamentsPage );
         $.RegisterForUnhandledEvent( "PanoramaComponent_MatchList_StateChange", _UpdateMatchList );
+        $.RegisterForUnhandledEvent( "MainMenuTabShown", _Refresh );
     }
 
     return {

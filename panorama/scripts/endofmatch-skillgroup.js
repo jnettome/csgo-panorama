@@ -17,29 +17,16 @@ var EOM_Skillgroup = (function () {
 
 		if ( GameStateAPI.IsDemoOrHltv() )
 		{
-			_End();
 			return false;
 		}
 
 		if ( isOfficialTournament )
 		{
-			_End();
 			return false;
 		}
 
 		if ( !_m_cP.bSkillgroupDataReady )
 		{
-			                          
-			if ( _m_cP.Data().m_retries++ >= 2 )
-			{
-				_End();
-				return false;
-			}
-			else
-			{
-				$.Schedule( 1.0, _DisplayMe );
-			}
-			
 			return false;
 		}
 
@@ -139,8 +126,17 @@ var EOM_Skillgroup = (function () {
 		{
 			var elModel = _m_cP.FindChildInLayoutFile( "id-eom-skillgroup-model" );
 
+			var mode = GameStateAPI.GetGameModeInternalName( true );
+									
+			var imagePath = "skillgroup";
+
+			                                          
+			                                
+			   	                      
+			
+
 			elModel.SetScene( "resource/ui/econ/ItemModelPanelCharWeaponInspect.res",
-			'models/inventory_items/skillgroups/skillgroup' + newRank + '.mdl',
+			'models/inventory_items/skillgroups/' + imagePath + newRank + '.mdl',
 				false
 			);
 

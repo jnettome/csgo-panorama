@@ -10,7 +10,7 @@
 			<Panel class="PlayerIcons" acceptsinput="false" force-no-composition-layer="true">
 
 				<Panel id="PI_FirstRotated">
-					<Image id="ViewFrustrum" scaling="stretch-to-fit-y-preserve-aspect" src="file://{images}/icons/ui/map_view_angle.svg"/>
+					<Image id="ViewFrustrum" src="file://{images}/icons/ui/map_view_angle.svg"/>
 					<Image id="SpeakingOnMap" src="file://{images}/icons/ui/map_speaking_onmap.svg"/>
           <Image id="SpeakingOffMap" src="file://{images}/icons/ui/map_speaking_offmap.svg"/>
 					<Image id="AbovePlayer" class="PI_Above" src="file://{images}/icons/ui/map_bomb_above.svg" texturewidth="18" textureheight="15" />

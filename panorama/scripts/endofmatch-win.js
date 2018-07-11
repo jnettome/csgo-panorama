@@ -48,6 +48,8 @@ var EOM_Win = ( function () {
 			!_m_oScoreData[ "teamdata" ][ "TERRORIST" ] )
 			return false;
 
+		$.DispatchEvent( 'PlaySoundEffect', 'UIPanorama.gameover_show', 'MOUSE' );
+
 		         
 		_m_cP.FindChildTraverse( 'WinTeam' ).RemoveClass( 'hidden' );
 		var winningTeam;
@@ -143,10 +145,6 @@ var EOM_Win = ( function () {
 
 	function _DisplayMe() 
 	{
-		if ( GameStateAPI.IsDemoOrHltv() )
-		{
-			return false;
-		}
 
    		                                                                        
 		  

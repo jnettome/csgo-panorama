@@ -50,7 +50,7 @@
 {
 	height: 100%;
 	width: 100%;
-	brightness: 0.7;
+	brightness: 1.2;
 	blur: fastgaussian( 6, 6, 3 );
 
 	                                        
@@ -71,12 +71,12 @@
 {
 	0%
 	{
-        brightness: 0.7;
+        brightness: 1.0;
         blur: fastgaussian( 5, 5, 3 );
     }
 	100%
 	{
-        brightness: 1.0;
+        brightness: 1.25;
         blur: fastgaussian( 0, 0, 0 );
 	}
 }
@@ -390,7 +390,8 @@
 {
 	width: 100%;
 	height: 100%;
-    background-color: gradient( radial, 50% 50%, 0% 0%, 60% 60%, from( #FFFFFF00 ), to( #000000DD ) );
+                                                                                                        
+    background-color: gradient(radial, 50% 50%, 0px 0px, 100% 100%, from( #00000000 ), color-stop( 0.4, #00000000), color-stop( 0.65, #000000DD), to( #000000FF ) );
                                                                               
 }
 

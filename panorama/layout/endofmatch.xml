@@ -19,9 +19,9 @@
 		<snippet name="snippet-eom-layout--default" >
 			<Panel class="eom-layout">
 				<Panel								id="eom-win" 			data-xml="endofmatch-win.xml" 			class="eom-panel" />
-				                           				              			                               			                        
-				                                   		                    	                                     	                        
-				                                   		               			                                		                        
+				<CSGOEndOfMatchXpPanel				id="eom-rank" 			data-xml="endofmatch-rank.xml" 			class="eom-panel" />
+				<CSGOEndOfMatchSkillgroupPanel		id="eom-skillgroup" 	data-xml="endofmatch-skillgroup.xml" 	class="eom-panel" />
+				<CSGOEndOfMatchItemDropsPanel 		id="eom-drops" 			data-xml="endofmatch-drops.xml" 		class="eom-panel" />
 				<CSGOEndOfMatchVotingPanel			id="eom-voting" 		data-xml="endofmatch-voting.xml" 		class="eom-panel" />
 			</Panel>
 		</snippet>

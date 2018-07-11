@@ -234,7 +234,7 @@ var ItemTile = ( function()
 
 	var _GetPopUpCapability = function()
 	{
-		if ( InventoryPanel )
+		if ( typeof InventoryPanel === "object" )                                                                 
 		{
 			var capInfo = InventoryPanel.GetCapabilityInfo();
 			if ( capInfo.popupVisible )	

@@ -35,9 +35,10 @@
 
 @define mousepanningcursorsize: 99px;
 
-@define monospaceFont: notomono-regular, Courier New,Courier;
-@define stratum2Font: Stratum2, "Arial Unicode MS", "Courier New", "Courier", "Lucida Console";
-@define stratum2monoFont: Stratum2 Bold Monodigit, "Courier New", "Courier", "Lucida Console";
+@define monospaceFont: notomono-regular;
+@define stratum2Font: Stratum2, "Arial Unicode MS";
+@define stratum2monoFont: Stratum2 Regular Monodigit, "Arial Unicode MS";
+@define stratum2monoFontBold: Stratum2 Bold Monodigit, "Arial Unicode MS";
 
 @define shadowOffset: fill #000000aa 0px 0px 8px 4px;
 

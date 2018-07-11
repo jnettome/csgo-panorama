@@ -720,6 +720,10 @@
 	color: white;
 }
 
+.buywheel-cant-buy .buywheel-item__price
+{
+	wash-color: darkgrey;
+}
 
 .radial-button:disabled .buywheel-item__price
 {
@@ -729,6 +733,13 @@
 .buywheel-cant-afford #ItemPrice
 {
 	wash-color: red;
+}
+
+.buywheel-cant-buy .buywheel-item__icon
+{
+	wash-color: buy-icon-disabled;
+	opacity:0.7;
+	img-shadow: 0px 0px 1px #00000040;
 }
 
 .radial-button:disabled .buywheel-item__icon

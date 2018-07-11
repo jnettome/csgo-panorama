@@ -260,7 +260,7 @@ CSGOHudRadar Label
 	height: Radar_Overlay_Round;
 	horizontal-align: center;
 	vertical-align: center;
-	background-color: gradient(radial, 50% 50%, 0px 0px, 150px 150px, from( #00000000 ), to( #000000CC ) );
+	background-color: gradient(radial, 50% 50%, 0px 0px, 150px 150px, from( #22222211 ), color-stop( 0.9, #000000CC)) )to( #000000DD ) );
 	border-radius: 50% / 50%;
 
 	opacity: 1.0;
@@ -566,12 +566,15 @@ CSGOHudRadar Label
 
 #ViewFrustrum
 {
-	height: 56px;
+	height: 64px;
+    width: 128px;
 
 	horizontal-align: center;
-	y: -4px;                              
+	y: -12px;                              
 
-	opacity: 0.15;
+	opacity: 0.08;
+
+    -s2-mix-blend-mode: normal;
 }
 
                                                                                

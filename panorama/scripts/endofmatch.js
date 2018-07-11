@@ -44,6 +44,7 @@ var EndOfMatch = ( function () {
 
 	function _SwitchToPanel( tab )
 	{
+
 		_m_cP.FindChildTraverse( 'rb--' + tab ).RemoveClass("hidden");
 		_m_cP.FindChildTraverse( 'rb--' + tab ).checked = true;
 		_NavigateToTab( tab );
@@ -127,6 +128,8 @@ var EndOfMatch = ( function () {
 	
 			_m_cP.AddClass( "reveal" );
 
+			_m_cP.SetMouseCapture( true );
+
 			$.Schedule( 1.25, _ShowNextPanel );
 
 			_m_jobStart = undefined;
@@ -160,20 +163,19 @@ var EndOfMatch = ( function () {
 	}
 
 
-
-	                                                                                                                 
-	                                                                                                                          
-	                                                                      
-
+	                                                                   
 
 	var _ShowNextPanel = function () {
 	
 		_m_currentPanelIndex++;
 
+
 		if ( _m_currentPanelIndex < _m_arrPanelObjects.length )
 		{		
-			                             
-			if ( _m_currentPanelIndex === ( _m_arrPanelObjects.length - 1 ) )
+			                                          
+			if ( _m_currentPanelIndex === ( _m_arrPanelObjects.length - 1 ) &&
+				!GameStateAPI.IsDemoOrHltv() &&
+				!GameStateAPI.IsQueuedMatchmaking() )
 			{
 				_m_cP.FindChildrenWithClassTraverse( "timer" ).forEach( el => el.active = true );
 			}	

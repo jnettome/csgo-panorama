@@ -47,7 +47,7 @@ function setupTooltip()
 	else
 	{
 	    ctx.RemoveClass('tooltip-inventory-item__has-rarity');
-	    ctx.SetDialogVariabile('rarity', '');
+	    ctx.SetDialogVariable('rarity', '');
 	}
 
                               

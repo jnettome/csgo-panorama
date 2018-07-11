@@ -19,21 +19,6 @@
 	height: 120px;
 }
 
-.MatchTile.MatchVictory
-{
-    background-color: gradient( linear, 0% 0%, 100% 0%, from( #00000000), color-stop( 0, #00FF0025  ), color-stop( 0, #00FF0025  ), to( #00FF0000 ) );
-}
-
-.MatchTile.MatchTied
-{
-    background-color: gradient( linear, 0% 0%, 100% 0%, from( #00000000), color-stop( 0, #00FF0010  ), color-stop( 0, #00FF0010  ), to( #00FF0000 ) );
-}
-
-.MatchTile.MatchLoss
-{
-    background-color: gradient( linear, 0% 0%, 100% 0%, from( #00000000), color-stop( 0, #FF000010   ), color-stop( 0, #FF000010  ), to( #FF000000 ) );
-}
-
 .MatchTile--Collapse
 {
     height: 0px;
@@ -50,6 +35,7 @@
     flow-children: down;
     horizontal-align: center;
     vertical-align: center;
+    margin-left: 32px;
 }
 
 .MatchMap__Icon
@@ -93,6 +79,7 @@
 	height: fit-children;
     flow-children: down;
     vertical-align: center;
+    margin-left:16px;
 }
 
 .MatchInfo
@@ -158,6 +145,14 @@
     width: 15px;
     height: 15px;
     vertical-align:center;
+}
+
+.MiniIcon
+{
+    margin:12px;
+
+    width: 18px;
+    height: 18px;
 }
 
 .TileButton.PopupButton
@@ -245,3 +240,31 @@
 	horizontal-align: center;
 }
 
+.download-animation
+{
+    opacity-mask: url( "file://{images}/icons/ui/downloaded.svg" );
+
+    animation-name: Download;
+    animation-duration: 1.25s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes 'Download'
+{
+    0%
+    {
+        background-color: gradient(linear, 0% 0%, 0% 100%, from(#aaaaaaff), color-stop(0, #aaaaaaff), color-stop(0, baseText), color-stop( 0.167, baseText), color-stop( 0.167, #aaaaaaff), to(#aaaaaaff) );
+    }
+    
+    100%
+    {
+        background-color: gradient(linear, 0% 0%, 0% 100%, from(#aaaaaaff), color-stop(0.833, #aaaaaaff), color-stop(0.833, baseText), color-stop( 1, baseText), color-stop( 1, #aaaaaaff), to(#aaaaaaff) );
+    }
+}
+
+.downloaded
+{
+    opacity-mask: url( "file://{images}/icons/ui/check.svg" );
+    background-color:positiveColor;
+}

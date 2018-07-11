@@ -90,6 +90,11 @@ var matchList = ( function() {
                     elListPanel.activeButton = undefined;
                 }
                 activeTiles[i].checked = false;
+                if ( watchTile.downloadStateHandler )
+                {
+                    $.UnregisterForUnhandledEvent( 'PanoramaComponent_MatchInfo_StateChange', watchTile.downloadStateHandler );
+                    watchTile.downloadStateHandler = undefined;
+                }
                 if ( tournament_id )
                 {
                     activeTiles[i].AddClass( 'MatchTile--Collapse' );
@@ -157,6 +162,7 @@ var matchList = ( function() {
         {
             var sectionDesc = PredictionsAPI.GetEventSectionIDByIndex( tournamentId, i );
             var sectionName = PredictionsAPI.GetSectionName( tournamentId, sectionDesc );
+            sectionName = $.Localize( "#CSGO_MatchInfo_Stage_" + sectionName.replace(/\s+/g, '') );
             var elSection = $.CreatePanel( 'Label', elMatchlistDropdown, 'group_' + sectionDesc, { text: sectionName } );
             elSection.AddClass( "DropDownMenu" );
             elSection.AddClass( "Width-300" );
@@ -165,7 +171,7 @@ var matchList = ( function() {
             elSection.SetAttributeString('section_id', sectionDesc );
             elMatchlistDropdown.AddOption( elSection );
         }
-        elMatchlistDropdown.SetSelected( 0 );
+		elMatchlistDropdown.SetSelectedIndex( 0 );
         elMatchlistDropdown.RemoveClass( 'hide' );
         var elMatchList = elParentPanel.FindChildTraverse( "JsMatchList" );
         elMatchlistDropdown.SetPanelEvent( 'oninputsubmit', _OnTournamentSectionSelected.bind( undefined, elParentPanel, elMatchList, tournamentId ) );
@@ -173,9 +179,7 @@ var matchList = ( function() {
 
     function _UpdateMatchList( elTab, matchListDescriptor )
     {
-		                                                                  
-        
-        var listState = MatchListAPI.GetState( matchListDescriptor );
+		var listState = MatchListAPI.GetState( matchListDescriptor );
         
         if ( listState === 'none')
         {
@@ -221,10 +225,12 @@ var matchList = ( function() {
             matchInfo.Hide( parentPanel.activeMatchInfoPanel );
             parentPanel.activeMatchInfoPanel = undefined;
         }
-        parentPanel.activeMatchInfoPanel = parentPanel.FindChildInLayoutFile( 'info_' + matchId );
+
+        var parentInfoPanel = parentPanel.FindChildTraverse( 'Info' );
+        parentPanel.activeMatchInfoPanel = parentInfoPanel.FindChild( 'info_' + matchId );
         if ( parentPanel.activeMatchInfoPanel == undefined )
         {
-            parentPanel.activeMatchInfoPanel = $.CreatePanel( 'Panel', parentPanel.FindChildTraverse( 'Info' ), 'info_' + matchId );
+            parentPanel.activeMatchInfoPanel = $.CreatePanel( 'Panel', parentInfoPanel, 'info_' + matchId );
             parentPanel.activeMatchInfoPanel.matchId = matchId;
             parentPanel.activeMatchInfoPanel.matchListDescriptor = matchListDescriptor;
             parentPanel.activeMatchInfoPanel.BLoadLayout( "file://{resources}/layout/matchinfo.xml", false, false );
@@ -323,7 +329,7 @@ var matchList = ( function() {
 		                                                                                              
         var sectionDesc = 0;
         var tournamentIndex = 0;
-        if ( parentPanel.tournament_id )
+        if ( ( nCount > 0 ) && ( parentPanel.tournament_id ) )
         {
             tournamentIndex = parentPanel.tournament_id.split(':')[1];
             if ( !parentPanel.matchListDropdownIsPopulated )
@@ -392,18 +398,13 @@ var matchList = ( function() {
             elMatchList.GetChild( i ).markForDelete = true;
         }
 
-        function _CreateOrValidateMatchTile( matchId, markForDelete )
+        function _CreateOrValidateMatchTile( matchId )
         {
             var elMatchButton = elMatchList.FindChildInLayoutFile( matchListDescriptor + "_" + matchId );
-                                                                                                                                             
-                                                                                                                                     
-                                                                                                                    
-                
-                                                      
-                
             if ( elMatchButton == undefined )
             {
                 elMatchButton = $.CreatePanel( 'RadioButton', elMatchList, matchListDescriptor + "_" + matchId );
+                elMatchButton.downloadStateHandler = undefined;
                 elMatchButton.group = parentPanel.id;
                 elMatchButton.myXuid = _m_myXuid;
                 elMatchButton.matchId = matchId;
@@ -422,6 +423,28 @@ var matchList = ( function() {
                 elMatchButton.RemoveClass( 'MatchTile--Collapse' );
             }
             elMatchButton.markForDelete = false;
+
+            function _UpdateDownloadState( elBoundMatchButton )
+            {
+                if ( ( elBoundMatchButton ) && ( !elBoundMatchButton.markForDelete ) )
+                {
+                    var elDownloadIndicator = elBoundMatchButton.FindChildInLayoutFile( 'id-download-state' );
+                    if ( elDownloadIndicator )
+                    {
+                        var isDownloading = ( MatchInfoAPI.GetMatchState( elBoundMatchButton.matchId ) === "downloading" )
+                        var canWatch = MatchInfoAPI.CanWatch( elBoundMatchButton.matchId );
+                        elDownloadIndicator.SetHasClass( "download-animation", isDownloading );
+                        elDownloadIndicator.SetHasClass( "downloaded", canWatch );
+                    }
+                }
+            }
+
+            if ( ( elMatchButton.downloadStateHandler == undefined ) && elMatchButton.FindChildInLayoutFile( 'id-download-state' ) )
+            {
+                elMatchButton.downloadStateHandler = $.RegisterForUnhandledEvent( 'PanoramaComponent_MatchInfo_StateChange', _UpdateDownloadState.bind( undefined, elMatchButton ) );
+                _UpdateDownloadState( elMatchButton );
+            }
+
             elMatchButton.RemoveClass( 'MatchTile--Collapse' );
         }
 		
@@ -456,7 +479,8 @@ var matchList = ( function() {
         UpdateMatchList             : _UpdateMatchList,
         ShowListSpinner             : _ShowListSpinner,
         SetListMessage              : _SetListMessage,
-        ShowInfoPanel               : _ShowInfoPanel
+        ShowInfoPanel               : _ShowInfoPanel,
+        ReselectActiveTile          : _ReselectActiveTile
     };
 
 })();

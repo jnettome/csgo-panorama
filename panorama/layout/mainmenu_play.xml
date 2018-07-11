@@ -42,6 +42,11 @@
 				</Panel>
 			</Panel>
 		</snippet>
+		<snippet name="NoWorkshopMaps">
+			<Panel class="map-selection-no-subscriptions">
+				<Label class="map-selection-no-subscriptions-label" html="true" text="#CSGO_Workshop_No_Maps" />
+			</Panel>
+		</snippet>
 	</snippets>
 
 	<Panel class="full-width full-height">
@@ -55,12 +60,12 @@
 						<Label html="true" text="play_setting_online" id="Play-official" data-type="official" value="1"/>
 						<Label html="true" text="play_setting_offline" id="Play-listen" data-type="listen" value="2"/>
 						<Label html="true" text="play_setting_training_course" id="PlayTraining" data-type="training" value="3"/>
-						                                                                                                           
+						<Label html="true" text="play_setting_workshop" id="PlayWorkshop" data-type="workshop" value="4"/>
 						<Label html="true" text="play_setting_community" id="PlayCommunity" data-type="community" value="5"/>
 					</DropDown>
 				</Panel>
 			</Panel>
-
+			
 			<Panel class="content-navbar content-navbar--short">
 				<Panel id="GameModeSelectionRadios" class="content-navbar__tabs">
 					<RadioButton id='competitive' 
@@ -90,7 +95,12 @@
 					              
 					            
 				</Panel>
-				<Panel class="vertical-center horizontal-align-right left-right-padding">
+
+				<Panel id="WorkshopSearchBar" class="content-navbar__tabs">
+					<TextEntry id="WorkshopSearchTextEntry" class="workshop-search-textentry" placeholder="#CSGO_Workshop_Search_Placeholder" onfocus="" />
+				</Panel>
+				
+				<Panel class="vertical-center left-right-flow horizontal-align-right left-right-padding">
 					<DropDown class="play-menu__botdifficulty PopupButton White hidden"  id="BotDifficultyDropdown" menuclass="DropDownMenu" oninputsubmit="PlayMenu.BotDifficultyChanged()">
 						<Label text="#SFUI_BotDifficulty0" id="0"/>
 						<Label text="#SFUI_BotDifficulty1" id="1"/>
@@ -99,8 +109,12 @@
 						<Label text="#SFUI_BotDifficulty4" id="4"/>
 						<Label text="#SFUI_BotDifficulty5" id="5"/>
 					</DropDown>
+					<Button class="PopupButton White" id="WorkshopVisitButton" onactivate="CSGOOpenSteamWorkshop()">
+						<Label text="#CSGO_Workshop_Visit" />
+					</Button>
 				</Panel>
 			</Panel>
+			
 			<Panel class="top-bottom-flow full-width full-height">
 				<Panel id="MapSelectionList" class="map-selection-list map-selection-list-all">
 					                                                                                                

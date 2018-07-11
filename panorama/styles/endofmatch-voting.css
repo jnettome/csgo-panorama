@@ -94,18 +94,18 @@
 
 	0%
 	{
-		background-color: #ffffff00;
+		border: 1px solid #ffffff00;
 	}
 
 
 	50%
 	{
-		background-color: #ffffffff;
+		border: 5px solid yellow;
 	}
 
 	100%
 	{
-		background-color: #ffffff00;
+		border: 1px solid #ffffff00;
 	}
 }
 
@@ -113,9 +113,9 @@
 .map-selection-btn__gradient--whiteout
 {
 	animation-name: pulse-random; 
-	animation-duration: 0.3s;
+	animation-duration: 0.5s;
 	animation-timing-function: ease-in-out;
-	animation-iteration-count: infinite;	
+	animation-iteration-count: 1;	
 }
 
 

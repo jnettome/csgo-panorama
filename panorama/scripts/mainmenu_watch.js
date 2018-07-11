@@ -114,7 +114,7 @@ var mainmenu_watch = ( function() {
                                                                                                                                                                                                 
             var pastTournamentPanel = elTournamentList.FindChildTraverse("other-tournaments");
 
-            for (var i = 12; i >= 1; i--)
+            for (var i = 13; i >= 1; i--)
             {
                 if ( i == 2 ) continue;
                                                          
@@ -172,6 +172,10 @@ var mainmenu_watch = ( function() {
             case "JsDownloaded":
             case "JsLive":
                 matchList.UpdateMatchList( elTab, MATCHLISTDESCRIPTOR[elTab.id] );
+                if ( _m_activeTab.activeMatchInfoPanel )
+                {
+                    matchInfo.ResizeRoundStatBars( _m_activeTab.activeMatchInfoPanel );
+                }
                 break;
         }
 
@@ -257,6 +261,7 @@ var mainmenu_watch = ( function() {
             parent.AddClass("no-margin");
             parent.AddClass('hide');
             newPanel = $.CreatePanel('Panel', parent, "tournament_content_" + tournament_id );
+            newPanel.Data().elMainMenuRoot = $.GetContextPanel().Data().elMainMenuRoot;
             parent.RemoveClass('hide');
             parent.RemoveClass( 'mainmenu-content--hidden' );
             parent.tournament_id = tournament_id;
@@ -310,6 +315,10 @@ var mainmenu_watch = ( function() {
                     return;
                 }
                 _m_activeTab.RemoveClass( 'mainmenu-content--hidden' );
+                if ( _m_activeTab.tournament_id )
+                {
+                    matchList.ReselectActiveTile( _m_activeTab );
+                }
                 if ( addToStack ) _m_tabStack.push( _m_activeTab );
             }
         }
@@ -367,6 +376,21 @@ var mainmenu_watch = ( function() {
         _InitResourceManagement( elTab );
     }
 
+    function _Refresh( tabid )
+    {
+        if ( tabid === 'JsWatch' )
+        {
+            if ( _m_activeTab )
+            {
+                if ( _m_activeTab.activeMatchInfoPanel )
+                {
+                    matchInfo.ResizeRoundStatBars( _m_activeTab.activeMatchInfoPanel );
+                }
+            }
+        }
+    }
+
+
                                                                                                                                                                          
                          
                                                                                                                                                                          
@@ -378,6 +402,7 @@ var mainmenu_watch = ( function() {
         $.RegisterForUnhandledEvent( "PanoramaComponent_MatchList_StateChange", _UpdateMatchList );
         $.RegisterForUnhandledEvent( "CloseSubMenuContent", _CloseSubMenuContent );
         $.RegisterForUnhandledEvent( "NavigateToTab", _NavigateToTab );
+        $.RegisterForUnhandledEvent( "MainMenuTabShown", _Refresh );
         _InitTab( 'JsYourMatches' );
         _InitTab( 'JsDownloaded')
         _InitTab( 'JsLive' );

@@ -1,16 +1,23 @@
                                            
 
-                                              	                                                        
-@define ScaleformOffsetX: translate3d( 1px, 1px, 0px );
+                                                                       
+                                                               
+@define CrosshairPanelOffset: translate3d( 0.5px, 0.5px, 0px );
 
                              
-@define cppPipDefaultOffset: 7;
-@define cppBlackPipDefaultOffset: 0;
-@define cppArcDefaultOffset: 4.5;
-@define cppTargetIDDuration: 0.25;	                                                              
+@define cppPipDefaultOffset: 8;                                                                          
+                                                                                               
+                                                      
 
-                                                                                
-@define pipSize: 10px;
+@define cppBlackPipDefaultOffset: 2;                                                               
+                                                     
+
+@define cppArcDefaultOffset: 4.0;                                                             
+                                                                                                                                            
+                                                             
+
+@define cppTargetIDDuration: 0.25;		                                                              
+
 @define arcSize: 9px;
 
 @define crosshairGreenColor: #82b116;
@@ -49,7 +56,7 @@ CSGOHudReticle Label
 	width: 100%;
 	height: 100%;
 	
-	transform: ScaleformOffsetX;
+	transform: CrosshairPanelOffset;
 }
 
 .crosshair--hidden
@@ -61,9 +68,10 @@ CSGOHudReticle Label
 
 .crosshair__pip
 {
-	horizontal-align: center;
-	vertical-align: center;
-	overflow: noclip;
+	horizontal-align: center_nopixelsnap;
+	vertical-align: center_nopixelsnap;
+	overflow: noclip;	                                                                             
+						                                                                                                 
 }
 
 .crosshair--piphidden .crosshair__pip
@@ -73,25 +81,24 @@ CSGOHudReticle Label
 
 .crosshair__pip--green
 {
-	                             
     -s2-mix-blend-mode: SRGBadditive;
-    opacity: 0.85;
+	opacity: 0.99;
 }
 
 .crosshair__pip--black
 {
 	wash-color-fast: #000000AA;
-    transform: translate3d( -4px, -1px, 0px );
 }
 
                                           
 
 .crosshair__arc
 {
-	horizontal-align: center;
-	vertical-align: center;
+	horizontal-align: center_nopixelsnap;
+	vertical-align: center_nopixelsnap;
     -s2-mix-blend-mode: SRGBadditive;
-	overflow: noclip;
+	overflow: noclip;	                                                                             
+						                                                                                                 
 }
 
 .crosshair--archidden .crosshair__arc
@@ -117,31 +124,40 @@ CSGOHudReticle Label
 {
 	width: 1px;
 	height: 1px;
-	horizontal-align: center;
-	vertical-align: center;
-	background-color: crosshairGreenColor;
-    -s2-mix-blend-mode: SRGBadditive;
 
-    transform: translate3d( -1px, -1px, 0px );
+	horizontal-align: center_nopixelsnap;
+	vertical-align: center_nopixelsnap;
+	overflow: noclip;	                                                                             
+						                                                                                                 
+	
+	wash-color-fast: crosshairGreenColor;
+    -s2-mix-blend-mode: SRGBadditive;
 }
 
                                                   
 
 .crosshair__blackcircle
 {
-	horizontal-align: center;
-	vertical-align: center;
-	wash-color-fast: #000000cc;
+	horizontal-align: center_nopixelsnap;
+	vertical-align: center_nopixelsnap;
+	overflow: noclip;	                                                                             
+						                                                                                                 
+
+	wash-color-fast: #00000088;
+	width: 7px;
+	height: 7px;
 }
 
                                             
 
 .crosshair__friend
 {
-	horizontal-align: center;
-	vertical-align: center;
+	horizontal-align: center_nopixelsnap;
+	vertical-align: center_nopixelsnap;
+	overflow: noclip;	                                                                             
+						                                                                                                 
+
 	-s2-mix-blend-mode: SRGBadditive;
-    transform: translate3d( 0px, 0px, 0px );
 }
 
 .crosshair__friend--hidden
