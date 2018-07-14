@@ -481,6 +481,8 @@ var MainMenu = ( function() {
 
 	var _InitNewsAndStore = function ()
 	{	
+		_AddStream();
+		
 		var elNews = $.CreatePanel( 'Panel', $.FindChildInContext( '#JsNewsContainer' ), 'JsNewsPanel' );
 		elNews.BLoadLayout( 'file://{resources}/layout/mainmenu_news.xml', false, false );
 		
@@ -507,6 +509,12 @@ var MainMenu = ( function() {
 		_ShowNewsAndStore();
 	};
 
+	var _AddStream = function()
+	{
+		var elStream = $.CreatePanel( 'Panel', $.FindChildInContext( '#JsNewsContainer' ), 'JsStreamPanel' );
+		elStream.BLoadLayout( 'file://{resources}/layout/mainmenu_stream.xml', false, false );
+	};
+
 	var _ShowNewsAndStore = function ()
 	{
 		var elNews = $.FindChildInContext( '#JsNewsContainer' );
@@ -518,8 +526,6 @@ var MainMenu = ( function() {
 		var elNews = $.FindChildInContext( '#JsNewsContainer' );
 		elNews.SetHasClass( 'hidden', true );
 	};
-
-
 
 	                                                                                                    
 	                     
@@ -570,6 +576,18 @@ var MainMenu = ( function() {
 				loadout.team = InventoryAPI.GetUIPreferenceString( 'ui_vanitysetting_team' );
 				loadout.loadoutSlot = InventoryAPI.GetUIPreferenceString( 'ui_vanitysetting_loadoutslot' );
 
+				                                            
+				                                         
+				var arrModels = CharacterAnims.GetValidCharacterModels();
+				if ( arrModels.filter( function( entry )
+					{
+						return entry.model === loadout.modelPath && entry.team === loadout.team;
+					} ).length <= 0 )
+				{
+					                                                                                                                     
+					loadout.itemId = null;
+					continue;
+				}
 				if ( !InventoryAPI.IsValidItemID( loadout.itemId ) || !InventoryAPI.IsItemInfoValid( loadout.itemId ) )
 				{
 					loadout.itemId = LoadoutAPI.GetItemID( loadout.team, loadout.loadoutSlot );
@@ -577,6 +595,24 @@ var MainMenu = ( function() {
 				}
 				else
 				{
+					                                                        
+					if ( !loadout.loadoutSlot || ( ItemInfo.GetSlotSubPosition( loadout.itemId ) !== loadout.loadoutSlot ) )
+					{
+						                                                                                                                   
+						loadout.itemId = null;
+						continue;
+					}
+					
+					                                            
+					if ( !( ItemInfo.IsItemAnyTeam( loadout.itemId ) ||
+						(ItemInfo.IsItemCt( loadout.itemId ) && loadout.team === 'ct') ||
+						(ItemInfo.IsItemT( loadout.itemId ) && loadout.team === 't') ) )
+					{
+						                                                                                                            
+						loadout.itemId = null;
+						continue;
+					}
+
 					                                                                                                                        
 				}
 			}
@@ -721,6 +757,7 @@ var MainMenu = ( function() {
 		var keyId = ParamsList[ 0 ];
 		var caseId = ParamsList[ 1 ];
 		var storeId = ParamsList[ 2 ];
+		var showMarketLinkDefault = MyPersonaAPI.GetLauncherType() === "perfectworld" ? 'false' : 'true';
 
 		JsInspectCallback = UiToolkitAPI.RegisterJSCallback( _OpenDecodeAfterInspect.bind( undefined, keyId, caseId, storeId ) );
 
@@ -732,6 +769,7 @@ var MainMenu = ( function() {
 			'&' + 'allowsave=false' +
 			'&' + 'showequip=false' +
 			'&' + 'showitemcert=false' +
+			'&' + 'showmarketlink='+ showMarketLinkDefault +
 			'&' + 'callback=' + JsInspectCallback,
 			'none'
 		);

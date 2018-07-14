@@ -5,9 +5,12 @@ var InspectActionBar = ( function (){
 	var m_modelImagePanel = null;
 	var m_itemId = '';
 	var m_callbackHandle = -1;
+
+	                                
 	var m_showCert = true;
 	var m_showEquip = true;
 	var m_showSave = true;
+	var m_showMaketLink = false;
 
 	var m_previewingMusic = false;
 	
@@ -24,12 +27,14 @@ var InspectActionBar = ( function (){
 		m_showCert = ( funcGetSettingCallback( 'showitemcert', 'true' ) === 'false' );
 		m_showEquip = ( funcGetSettingCallback( 'showequip', 'true' ) === 'false' );
 		m_showSave = ( funcGetSettingCallback( 'allowsave', 'true' ) === 'true' );
+		m_showMaketLink = ( funcGetSettingCallback( 'showmarketlink', 'false' ) === 'true' );
 		
 		_SetUpItemCertificate( elPanel, itemId );
 		_SetupEquipItemBtns( elPanel, itemId );
 		_ShowWeaponAndCharacterModelBtns( elPanel, itemId );
 		_ShowSaveCharBtn( elPanel );
 		_SetCloseBtnAction( elPanel );
+		_SetUpMarketLink( elPanel, itemId );
 
 		var slot = ItemInfo.GetSlot( itemId );
 		if ( slot == "musickit" )
@@ -68,6 +73,31 @@ var InspectActionBar = ( function (){
 
 		elCert.SetPanelEvent( 'onmouseout', function (){
 			UiToolkitAPI.HideTextTooltip();
+		});
+	};
+
+	var _SetUpMarketLink = function( elPanel, id )
+	{
+		var elMarketLinkBtn = elPanel.FindChildInLayoutFile( 'InspectMarketLink' );
+
+		elMarketLinkBtn.SetHasClass( 'hidden', !m_showMaketLink );
+
+		if ( !m_showMaketLink )
+		{
+			return;
+		}
+
+		elMarketLinkBtn.SetPanelEvent( 'onmouseover', function (){
+			UiToolkitAPI.ShowTextTooltip('InspectMarketLink', '#SFUI_Store_Market_Link');
+		});
+
+		elMarketLinkBtn.SetPanelEvent( 'onmouseout', function (){
+			UiToolkitAPI.HideTextTooltip();
+		});
+
+		elMarketLinkBtn.SetPanelEvent( 'onactivate', function() {
+			SteamOverlayAPI.OpenURL( ItemInfo.GetMarketLinkForLootlistItem( id ));
+			StoreAPI.RecordUIEvent( "ViewOnMarket" );
 		});
 	};
 
@@ -164,21 +194,7 @@ var InspectActionBar = ( function (){
 
 	var _GetValidCharacterModels = function ( id )
 	{
-		var dropdownEntries = [
-			{ label:'#faction_sas', model:"models/player/custom_player/legacy/ctm_sas.mdl", team:"ct" },
-			                                                                                                       
-			                                                                                                         
-			                                                                                                       
-			{ label:'#faction_elite_a', model:"models/player/custom_player/legacy/tm_leet_variantc.mdl", team:"t" },
-			{ label:'#faction_elite_b', model:"models/player/custom_player/legacy/tm_leet_variantb.mdl", team:"t" },
-			{ label:'#faction_elite_c', model:"models/player/custom_player/legacy/tm_leet_variantd.mdl", team:"t" },
-			                                                                                                                 
-			                                                                                                           
-			                                                                                                                   
-			{ label:'#faction_phoenix', model:"models/player/custom_player/legacy/tm_phoenix.mdl", team:"t" }
-		];
-
-		return dropdownEntries.filter(function (entry) {
+		return CharacterAnims.GetValidCharacterModels().filter(function (entry) {
 			return (ItemInfo.IsItemCt(id) && entry.team === 'ct') ||
 				(ItemInfo.IsItemT(id) && entry.team === 't') ||
 				ItemInfo.IsItemAnyTeam(id);
